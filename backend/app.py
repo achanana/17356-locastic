@@ -138,6 +138,7 @@ def add_item(seller_id):
 
 
 
+
 # Remove an item from the product list for a seller
 @backend_app.route('/add_item/<seller_id>', methods=['GET'])
 def remove_item(seller_id):
