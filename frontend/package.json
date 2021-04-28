@@ -24,13 +24,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "npm run prettier:check && npm run eslint && react-scripts test",
     "eject": "react-scripts eject",
-    "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
+    "prettier:cli": "prettier \"**/*.ts\"",
     "prettier:check": "npm run prettier:cli -- -l",
     "prettier:fix": "npm run prettier:cli -- --write",
-    "eslint": "lb-eslint --report-unused-disable-directives .",
-    "eslint:fix": "npm run eslint -- --fix"
+    "eslint": "eslint \"**/*.ts\" ",
+    "eslint:fix": "eslint \"**/*.ts\" --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -52,7 +52,11 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.25.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.23.2",
     "prettier": "^2.2.1"
   }
 }
