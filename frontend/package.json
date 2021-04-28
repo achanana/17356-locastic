@@ -31,6 +31,7 @@
     "prettier:fix": "npm run prettier:cli -- --write",
     "eslint": "eslint \"**/*.ts\" ",
     "eslint:fix": "eslint \"**/*.ts\" --fix"
+    "publishToHeroku": "cd ../ && git subtree push --prefix frontend heroku-loctastic-frontend main || true"
   },
   "eslintConfig": {
     "extends": [
