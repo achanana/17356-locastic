@@ -7,6 +7,7 @@ import blueberryMuffin from './images/blueberryMuffin.jpg';
 import croissant from './images/croissant.jpg';
 import cookieGiftBasket from './images/cookieGiftBasket.jpg';
 import 'fontsource-roboto';
+import Cart from './Cart';
 
 import {
   BrowserRouter as Router,
@@ -62,9 +63,11 @@ export const menuItems : menuItem[] = [
   }
 ]
 
+let customerCart: Cart = new Cart();
+
 export default function App() {
   return (
-    <LoctasticContextProvider value={{ menuItems }}>
+    <LoctasticContextProvider value={{ menuItems, customerCart }}>
     <div>
       <Router>
         <Switch>
