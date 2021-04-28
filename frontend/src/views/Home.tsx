@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         textAlign: 'center',
         fontSize: '2ch',
-    }
+    },
 }))
 
 export default function Home() {
@@ -43,11 +43,11 @@ export default function Home() {
             </div>
             <h3>Bakery items</h3>
             <Grid container spacing={1}>
-                {menuItems.filter(menuItem => menuItem.category === itemCategories.BakeryItem).map((menuItem: menuItem) => <div key={menuItem.id}> <MenuItem menuItem={menuItem} /></div>)}
+                {menuItems.filter(menuItem => menuItem.category === itemCategories.BakeryItem).map((menuItem: menuItem) => <MenuItem key={menuItem.id} menuItem={menuItem} />)}
             </Grid>
             <h3>Gift Baskets</h3>
             <Grid container spacing={1}>
-            {menuItems.filter(menuItem => menuItem.category === itemCategories.GiftBasket).map((menuItem: menuItem) => <div key={menuItem.id}><MenuItem menuItem={menuItem} /></div>)}
+            {menuItems.filter(menuItem => menuItem.category === itemCategories.GiftBasket).map((menuItem: menuItem) => <MenuItem key={menuItem.id} menuItem={menuItem} /> )}
             </Grid>
         </div>
     )
