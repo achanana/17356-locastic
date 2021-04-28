@@ -58,10 +58,12 @@ def homepage_items():
 def seller_info(id):
     response = None
     for seller in sellers:
-        if seller["id"] == id:
+        if seller["id"] == int(id):
             response = jsonify(seller)
             break
     if response == None:
+        print("here")
+        response = jsonify({})
         response.status_code = 409
     else:
         response.status_code = 200
@@ -73,12 +75,30 @@ def add_order():
     order = request.get_json()
     if order is None:
         return Response(status=409)
+    if "items" not in order:
+      return Response(status=409)
+    
 
+    global next_order_id
+    order["id"] = next_order_id
+    # Build response to return assigned order id to customer 
+    response = jsonify({"order_id": order["id"] })
+    # response = jsonify(order)
+    next_order_id += 1
+    response.status_code = 200
     orders.append(order)
+    
+    print("added order")
     # Need to look for which items from the order
     # are sold by which sellers and add the order_id
     # to the respective seller_ids
-    return Response(status=200)
+    for item in order["items"]:
+        for seller in sellers:
+            if item in seller["items"]:
+                seller["order_ids"].append(order["id"])
+                break
+    
+    return response
 
 
 # Add a new seller and return seller id for that particular seller
@@ -90,11 +110,13 @@ def add_seller():
 
     global next_seller_id
     seller["id"] = next_seller_id
+    # Build response to return assigned seller id to seller 
+    response = jsonify({"seller_id": seller["id"] })
     next_seller_id += 1
-
+    response.status_code = 200
     sellers.append(seller)
-    #  Probably need to return seller id to seller too
-    return Response(status=200)
+    
+    return response
 
 
 
@@ -108,6 +130,7 @@ def seller_orders(seller_id):
             response = jsonify(seller['order_ids'])
             break
     if response == None:
+        response = jsonify({})
         response.status_code = 409
     else:
         response.status_code = 200
@@ -115,56 +138,62 @@ def seller_orders(seller_id):
     
     
 # Add a new item to the product list for a seller
-@backend_app.route('/add_item/<seller_id>', methods=['GET'])
+@backend_app.route('/add_item/<seller_id>', methods=['POST'])
 def add_item(seller_id):
+    if request.method == 'POST':
+        item = request.get_json()
 
-    item = request.get_json()
-    if item is None:
-        return Response(status=409)
+        if item is None:
+            return Response(status=409)
 
-    global next_item_id
-    item["id"] = next_item_id
-    next_item_id += 1
+        global next_item_id
+        item["id"] = next_item_id
+        next_item_id += 1
 
-    menu_items.append(item)
+        menu_items.append(item)
 
-    for seller in sellers:
-       if seller["id"] == seller_id:
-            seller["items"].append(item["id"])
-            break
+        for seller in sellers:
+          if seller["id"] == int(seller_id):
+                seller["items"].append(item["id"])
+                break
 
-    #  Probably need to return item_id to seller too?
-    return Response(status=200)
+        # Build response to return item_id to seller
+        # and also add to seller items
+        response = jsonify({"item_id": item["id"] })
+        response.status_code = 200        
+       
+        return response
 
 
 
 
 # Remove an item from the product list for a seller
-@backend_app.route('/add_item/<seller_id>', methods=['GET'])
+@backend_app.route('/remove_item/<seller_id>', methods=['DELETE'])
 def remove_item(seller_id):
+    if request.method == 'POST':
 
-    item = request.get_json()
-    if item is None:
-        return Response(status=409)
+        item = request.get_json()
+        if item is None:
+            return Response(status=409)
 
-    flag = 0
-    for seller in sellers:
-        if seller["id"] == seller_id:
-            if item["id"] in seller["items"]:
-                seller["items"].remove(item["id"])
-                flag = 1
-            break
+        flag = 0
+        for seller in sellers:
+            if seller["id"] == seller_id:
+                if item["id"] in seller["items"]:
+                    seller["items"].remove(item["id"])
+                    flag = 1
+                break
 
 
-    for it in menu_items:
-       if it["id"] == item["id"]:
-            menu_items.remove(it)
-            break
+        for it in menu_items:
+          if it["id"] == item["id"]:
+                menu_items.remove(it)
+                break
 
-    if flag == 0:
-        return Response(status=409)
-    else:
-        return Response(status=200)
+        if flag == 0:
+            return Response(status=409)
+        else:
+            return Response(status=200)
 
 
 
