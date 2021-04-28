@@ -54,9 +54,9 @@ export default function MenuItem(props : Props) {
                         </Typography>
                     </CardContent>
                     <div className={classes.controls}>
-                      {props.menuItem.quantity == null && <IconButton aria-label="previous" color="secondary" variant="contained" onClick={()=>{decrement(props.menuItem.id)}}>-</IconButton>}
-                      {props.menuItem.quantity ? props.quantity : cart[props.donut.id]}s
-                      {props.menuItem.quantity == null && <IconButton aria-label="previous" color="secondary" variant="contained" onClick={()=>{customerCart.incrementQty(props.menuItem)}}>+</IconButton>}
+                      <IconButton color="secondary" onClick={()=>{customerCart.decrementQty(props.menuItem)}}>-</IconButton>
+                      {customerCart.getQty(props.menuItem)}
+                      <IconButton color="secondary" onClick={()=>{customerCart.incrementQty(props.menuItem)}}>+</IconButton>
                     </div>
                 </div>
                 <CardMedia className={classes.cover} image={props.menuItem.image} title="Another menu item" />

@@ -17,4 +17,7 @@ export class CartItem {
         this.quantity -= 1;
         this.quantity = Math.max(0, this.quantity);
     }
+    getQty() {
+        return this.quantity;
+    }
 }

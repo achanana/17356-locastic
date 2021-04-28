@@ -7,9 +7,6 @@ interface cartItemDict {
 
 export default class Cart {
     cartItems: cartItemDict = {};
-    addToCart(item: menuItem, qty: number) {
-        this.cartItems[item.id] = new CartItem(qty);
-    }
     incrementQty(item: menuItem) {
         if (item.id in this.cartItems) {
             this.cartItems[item.id].incrementQty();
@@ -19,10 +16,21 @@ export default class Cart {
     }
     decrementQty(item: menuItem) {
         if (item.id in this.cartItems) {
-            this.cartItems[item.id].decrementQty();
+            if (this.cartItems[item.id].getQty() == 1) {
+                delete this.cartItems[item.id];
+            } else {
+                this.cartItems[item.id].decrementQty();
+            }
         }
     }
     clearCart() {
         this.cartItems = {};
+    }
+    getQty(item: menuItem) {
+        if (item.id in this.cartItems) {
+            return this.cartItems[item.id].getQty();
+        } else {
+            return 0;
+        }
     }
 }
