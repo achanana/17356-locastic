@@ -1,0 +1,20 @@
+# https://medium.com/swlh/auto-deploying-a-monorepo-to-heroku-with-github-actions-da62e8ae172c
+name: Deploy to Heroku (Frontend)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add frontend remote origin
+        run: git remote add heroku-loctastic-frontend https://heroku:${{ secrets.HEROKU_API_TOKEN }}@git.heroku.com/loctastic-frontend.git
+      - name: Deploy frontend to Heroku
+        run: git push heroku-loctastic-frontend `git subtree split --prefix frontend main`:refs/heads/main --force
