@@ -25,7 +25,7 @@ export interface menuItem {
   image: string,
   seller: string,
   category: itemCategories,
-};
+}
 
 export const menuItems : menuItem[] = [
   {
