@@ -1,6 +1,7 @@
-
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
+import { menuItem } from '../App';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -32,12 +33,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface Props {
-    menuItem: {
-        name: string,
-        price: number,
-        image: string,
-        category: string
-    },
+    menuItem: menuItem
 }
 
 export default function MenuItem(props : Props) {

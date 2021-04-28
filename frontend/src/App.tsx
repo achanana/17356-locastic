@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Home from './views/Home';
 import LoctasticContextProvider from './contexts/LoctasticContext';
@@ -26,7 +25,7 @@ export interface menuItem {
   image: string,
   seller: string,
   category: itemCategories,
-};
+}
 
 export const menuItems : menuItem[] = [
   {

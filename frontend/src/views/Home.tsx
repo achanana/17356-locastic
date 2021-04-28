@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Button, Typography, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { LoctasticContext } from '../contexts/LoctasticContext';
 import MenuItem from './MenuItem';
-import { itemCategories } from '../App';
+import { itemCategories, menuItem } from '../App';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -43,11 +43,11 @@ export default function Home() {
             </div>
             <h3>Bakery items</h3>
             <Grid container spacing={1}>
-                {menuItems.filter(menuItem => menuItem.category === itemCategories.BakeryItem).map((menuItem: any) => <MenuItem menuItem={menuItem} />)}
+                {menuItems.filter(menuItem => menuItem.category === itemCategories.BakeryItem).map((menuItem: menuItem) => <div key={menuItem.id}> <MenuItem menuItem={menuItem} /></div>)}
             </Grid>
             <h3>Gift Baskets</h3>
             <Grid container spacing={1}>
-            {menuItems.filter(menuItem => menuItem.category === itemCategories.GiftBasket).map((menuItem: any) => <MenuItem menuItem={menuItem} />)}
+            {menuItems.filter(menuItem => menuItem.category === itemCategories.GiftBasket).map((menuItem: menuItem) => <div key={menuItem.id}><MenuItem menuItem={menuItem} /></div>)}
             </Grid>
         </div>
     )
