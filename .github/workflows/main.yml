@@ -23,3 +23,4 @@ jobs:
           heroku_app_name: "loctastic-backend" #Must be unique in Heroku
           heroku_email: "zaini@andrew.cmu.edu"
           appdir: "backend"
+          procfile: "web: cd ../ && git subtree push --prefix backend heroku-loctastic-backend main || true"
