@@ -7,12 +7,19 @@ interface cartItemDict {
 
 export default class Cart {
   cartItems: cartItemDict = {};
+
+  setTo(anotherCart: Cart) {
+    this.cartItems = anotherCart.cartItems;
+    return this;
+  }
+
   incrementQty(item: menuItem) {
     if (item.id in this.cartItems) {
       this.cartItems[item.id].incrementQty();
     } else {
       this.cartItems[item.id] = new CartItem(item, 1);
     }
+    return this;
   }
   decrementQty(item: menuItem) {
     if (item.id in this.cartItems) {
@@ -22,9 +29,11 @@ export default class Cart {
         this.cartItems[item.id].decrementQty();
       }
     }
+    return this;
   }
   clearCart() {
     this.cartItems = {};
+    return this;
   }
   getQty(item: menuItem) {
     if (item.id in this.cartItems) {

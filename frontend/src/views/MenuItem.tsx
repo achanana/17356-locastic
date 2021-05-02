@@ -39,7 +39,7 @@ interface Props {
 
 export default function MenuItem(props : Props) {
     const classes = useStyles();
-    const { customerCart } = useContext(LoctasticContext);
+    const { customerCart, addItemToCart, removeItemFromCart } = useContext(LoctasticContext);
 
     return (
         <Grid item xs={4}>
@@ -54,9 +54,9 @@ export default function MenuItem(props : Props) {
                         </Typography>
                     </CardContent>
                     <div className={classes.controls}>
-                      <IconButton color="secondary" onClick={()=>{customerCart.decrementQty(props.menuItem)}}>-</IconButton>
+                      <IconButton color="secondary" onClick={()=>{removeItemFromCart(props.menuItem)}}>-</IconButton>
                       {customerCart.getQty(props.menuItem)}
-                      <IconButton color="secondary" onClick={()=>{customerCart.incrementQty(props.menuItem)}}>+</IconButton>
+                      <IconButton color="secondary" onClick={()=>{addItemToCart(props.menuItem)}}>+</IconButton>
                     </div>
                 </div>
                 <CardMedia className={classes.cover} image={props.menuItem.image} title="Another menu item" />
