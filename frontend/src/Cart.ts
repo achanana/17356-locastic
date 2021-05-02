@@ -42,4 +42,7 @@ export default class Cart {
       return 0;
     }
   }
+  getCartItems() {
+    return this.cartItems;
+  }
 }

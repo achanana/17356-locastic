@@ -8,6 +8,7 @@ import croissant from './images/croissant.jpg';
 import cookieGiftBasket from './images/cookieGiftBasket.jpg';
 import 'fontsource-roboto';
 import Cart from './Cart';
+import CartPageView from "./views/Cart";
 
 import {
   BrowserRouter as Router,
@@ -82,6 +83,9 @@ export default function App() {
     <div>
       <Router>
         <Switch>
+          <Route path="/cart">
+            <CartPageView />
+          </Route>
           <Route path="/">
             <Home />
           </Route>

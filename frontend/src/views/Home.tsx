@@ -1,10 +1,11 @@
 
 import React, { useContext } from 'react';
-import { AppBar, Toolbar, Button, Typography, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { LoctasticContext } from '../contexts/LoctasticContext';
 import MenuItem from './MenuItem';
 import { itemCategories, menuItem } from '../App';
+import NavBar from './NavBar';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -30,14 +31,7 @@ export default function Home() {
     const { menuItems } = useContext(LoctasticContext);
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="transparent">
-                <Toolbar>       
-                    <Typography className={classes.title}>
-                        Loctastic
-                    </Typography>
-                    <Button>Home</Button>
-                </Toolbar>
-            </AppBar>
+            {<NavBar />}
             <div className={classes.root}>
                 <h2>Welcome, John Doe!</h2>
             </div>
