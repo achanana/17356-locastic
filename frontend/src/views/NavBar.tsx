@@ -1,7 +1,9 @@
-import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Badge, Box, Button, Toolbar, Typography } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
-import React from "react";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import React, { useContext } from "react";
+import { LoctasticContext } from "../contexts/LoctasticContext";
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -13,19 +15,28 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         fontSize: '2ch',
     },
+    navBar: {
+    }
 }))
 
 export default function NavBar() {
     const classes = useStyles();
+    const { customerCart } = useContext(LoctasticContext);
     return (
-        <AppBar position="static" color="transparent">
+        <Box mb={4}>
+        <AppBar position="static" color="transparent" className={classes.navBar}>
             <Toolbar>       
                 <Typography className={classes.title}>
                     Loctastic
                 </Typography>
                 <Button component={ Link } to="/">Home</Button>
-                <Button component={ Link } to="/cart">Cart</Button>
+                <Button component={ Link } to="/cart">
+                    <Badge badgeContent={customerCart.getTotalQty()} color="primary">
+                        <ShoppingCartIcon/>
+                    </Badge>
+                </Button>
             </Toolbar>
         </AppBar>
+        </Box>
     )
 }

@@ -4,6 +4,7 @@ import { LoctasticContext } from '../contexts/LoctasticContext';
 import NavBar from './NavBar';
 import React from "react";
 import CartItemView from './CartItem';
+import { Button, Grid, List, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -22,6 +23,10 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         fontSize: '2ch',
     },
+    cartList: {
+        backgroundColor: '#eeeeee',
+        minHeight: '500px'
+    }
 }))
 
 export default function CartPageView() {
@@ -31,7 +36,21 @@ export default function CartPageView() {
     return (
         <div className={classes.root}>
             <NavBar />
-            {Object.keys(cartItems).map((key) => Number(key)).map((key) => <CartItemView key={cartItems[key].menuItem.id} cartItem={cartItems[key]} />)}
+            <Grid container spacing={10}>
+                <Grid item xs={6}>
+                    <List className={classes.cartList}>
+                        {Object.keys(cartItems).map((key) => Number(key)).map((key) => <CartItemView key={cartItems[key].menuItem.id} cartItem={cartItems[key]} />)}
+                    </List>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="h6">
+                    Total: ${customerCart.cartTotal()}
+                    </Typography>
+                    <Button variant="contained" color="primary">
+                        Check out
+                    </Button>
+                </Grid>
+            </Grid>
         </div>
     )
 }

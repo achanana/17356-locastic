@@ -64,9 +64,6 @@ export const menuItems : menuItem[] = [
   }
 ]
 
-let defCustomerCart = new Cart();
-defCustomerCart.incrementQty(menuItems[0]);
-
 export default function App() {
   const [customerCart, setCustomerCart] = useState(new Cart());
   const addItemToCart = (menuItem: menuItem) => {

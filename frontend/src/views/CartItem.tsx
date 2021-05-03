@@ -1,3 +1,4 @@
+import { Avatar, Divider, ListItem, ListItemAvatar, ListItemText } from "@material-ui/core";
 import React from "react";
 import { CartItem } from "../CartItem";
 
@@ -8,9 +9,14 @@ interface CartItemProps {
 export default function CartItemView(props : CartItemProps) {
     return (
         <div>
-            Name: {props.cartItem.menuItem.name}
-            Quantity: {props.cartItem.getQty()}
-            Price: {props.cartItem.menuItem.price * props.cartItem.getQty()}
+            <ListItem>
+                <ListItemAvatar>
+                    <Avatar src={props.cartItem.menuItem.image}/>
+                  </ListItemAvatar>
+                <ListItemText primary={props.cartItem.menuItem.name} secondary={`Quantity: ${props.cartItem.getQty()}`} />
+                ${props.cartItem.menuItem.price * props.cartItem.getQty()}
+            </ListItem>
+            <Divider />
         </div>
     );
 }
