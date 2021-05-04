@@ -8,6 +8,7 @@ import croissant from './images/croissant.jpg';
 import cookieGiftBasket from './images/cookieGiftBasket.jpg';
 import 'fontsource-roboto';
 import Cart from './Cart';
+import CartPageView from "./views/Cart";
 
 import {
   BrowserRouter as Router,
@@ -63,9 +64,6 @@ export const menuItems : menuItem[] = [
   }
 ]
 
-let defCustomerCart = new Cart();
-defCustomerCart.incrementQty(menuItems[0]);
-
 export default function App() {
   const [customerCart, setCustomerCart] = useState(new Cart());
   const addItemToCart = (menuItem: menuItem) => {
@@ -82,6 +80,9 @@ export default function App() {
     <div>
       <Router>
         <Switch>
+          <Route path="/cart">
+            <CartPageView />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
