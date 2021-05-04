@@ -4,7 +4,8 @@ import { LoctasticContext } from '../contexts/LoctasticContext';
 import NavBar from './NavBar';
 import React from "react";
 import CartItemView from './CartItem';
-import { Button, Grid, List, Typography } from '@material-ui/core';
+import { Button, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,20 +34,26 @@ export default function CartPageView() {
     const classes = useStyles();
     const { customerCart } = useContext(LoctasticContext);
     const cartItems = customerCart.getCartItems();
+    let cartItemList;
+    if (customerCart.getTotalQty() > 0) {
+        cartItemList = Object.keys(cartItems).map((key) => Number(key)).map((key) => <CartItemView key={cartItems[key].menuItem.id} cartItem={cartItems[key]} />);
+    } else {
+        cartItemList = <ListItem>No items in the cart</ListItem>;
+    }
     return (
         <div className={classes.root}>
             <NavBar />
             <Grid container spacing={10}>
                 <Grid item xs={6}>
                     <List className={classes.cartList}>
-                        {Object.keys(cartItems).map((key) => Number(key)).map((key) => <CartItemView key={cartItems[key].menuItem.id} cartItem={cartItems[key]} />)}
+                        {cartItemList}
                     </List>
                 </Grid>
                 <Grid item xs={6}>
                     <Typography variant="h6">
                     Total: ${customerCart.cartTotal()}
                     </Typography>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary" component={ Link } to="/checkout" disabled={customerCart.getTotalQty() == 0}>
                         Check out
                     </Button>
                 </Grid>

@@ -46,9 +46,19 @@ export default class Cart {
     return this.cartItems;
   }
   getTotalQty() {
-    return Object.keys(this.cartItems).map(key => Number(key)).map(key => this.cartItems[key]).reduce((total, cartItem) => total + cartItem.getQty(), 0)
+    return Object.keys(this.cartItems)
+      .map((key) => Number(key))
+      .map((key) => this.cartItems[key])
+      .reduce((total, cartItem) => total + cartItem.getQty(), 0);
   }
   cartTotal() {
-    return Object.keys(this.cartItems).map(key => Number(key)).map(key => this.cartItems[key]).reduce((total, cartItem) => total + cartItem.getQty() * cartItem.menuItem.price, 0)
+    return Object.keys(this.cartItems)
+      .map((key) => Number(key))
+      .map((key) => this.cartItems[key])
+      .reduce(
+        (total, cartItem) =>
+          total + cartItem.getQty() * cartItem.menuItem.price,
+        0
+      );
   }
 }
