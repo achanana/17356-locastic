@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Home from './views/Home';
 import LoctasticContextProvider from './contexts/LoctasticContext';
@@ -7,6 +7,7 @@ import blueberryMuffin from './images/blueberryMuffin.jpg';
 import croissant from './images/croissant.jpg';
 import cookieGiftBasket from './images/cookieGiftBasket.jpg';
 import 'fontsource-roboto';
+import Cart from './Cart';
 
 import {
   BrowserRouter as Router,
@@ -62,9 +63,22 @@ export const menuItems : menuItem[] = [
   }
 ]
 
+let defCustomerCart = new Cart();
+defCustomerCart.incrementQty(menuItems[0]);
+
 export default function App() {
+  const [customerCart, setCustomerCart] = useState(new Cart());
+  const addItemToCart = (menuItem: menuItem) => {
+    const newCart = new Cart().setTo(customerCart).incrementQty(menuItem);
+    setCustomerCart(newCart);
+    console.log(customerCart);
+  }
+  const removeItemFromCart = (menuItem: menuItem) => {
+    const newCart = new Cart().setTo(customerCart).decrementQty(menuItem);
+    setCustomerCart(newCart);
+  }
   return (
-    <LoctasticContextProvider value={{ menuItems }}>
+    <LoctasticContextProvider value={{ menuItems, customerCart, addItemToCart, removeItemFromCart }}>
     <div>
       <Router>
         <Switch>
