@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardContent, CardMedia, Grid, IconButton, Typography } from '@material-ui/core';
 import { menuItem } from '../App';
 import { LoctasticContext } from '../contexts/LoctasticContext';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -47,7 +49,9 @@ export default function MenuItem(props : Props) {
                 <div className={classes.details}>
                     <CardContent className={classes.content}>
                         <Typography component="h5" variant="h5">
+                          <Link component={RouterLink} color='inherit' to={`/item/${props.menuItem.id}`}>
                             {props.menuItem.name}
+                          </Link>
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
                             ${props.menuItem.price} / unit

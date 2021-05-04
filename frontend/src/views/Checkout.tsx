@@ -2,7 +2,6 @@ import { Button, Grid, InputLabel, Select, TextField, Typography } from "@materi
 import { makeStyles } from '@material-ui/core/styles';
 import React, { ChangeEvent, useContext, useState } from "react";
 import { LoctasticContext } from "../contexts/LoctasticContext";
-import NavBar from "./NavBar";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -48,7 +47,6 @@ export default function Checkout() {
 
     return (
         <div className={classes.root}>
-            <NavBar />
             <Typography variant="h5">Place your order for ${customerCart.cartTotal()}</Typography>
             <Grid container spacing={3} direction='column'>
                 <Grid item>

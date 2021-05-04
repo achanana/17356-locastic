@@ -1,6 +1,7 @@
 import { AppBar, Badge, Box, Button, Toolbar, Typography } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import React, { useContext } from "react";
 import { LoctasticContext } from "../contexts/LoctasticContext";
@@ -27,10 +28,11 @@ export default function NavBar() {
         <AppBar position="static" color="transparent" className={classes.navBar}>
             <Toolbar>       
                 <Typography className={classes.title}>
-                    Loctastic
+                    <Link component={RouterLink} color='inherit' to='/'>
+                        Loctastic
+                    </Link>
                 </Typography>
-                <Button component={ Link } to="/">Home</Button>
-                <Button component={ Link } to="/cart">
+                <Button component={RouterLink} to="/cart">
                     <Badge badgeContent={customerCart.getTotalQty()} color="primary">
                         <ShoppingCartIcon/>
                     </Badge>
