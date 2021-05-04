@@ -9,6 +9,7 @@ import cookieGiftBasket from './images/cookieGiftBasket.jpg';
 import 'fontsource-roboto';
 import Cart from './Cart';
 import CartPageView from "./views/Cart";
+import Checkout from "./views/Checkout";
 
 import {
   BrowserRouter as Router,
@@ -82,6 +83,9 @@ export default function App() {
         <Switch>
           <Route path="/cart">
             <CartPageView />
+          </Route>
+          <Route path="/checkout">
+            <Checkout />
           </Route>
           <Route path="/">
             <Home />
