@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { LoctasticContext } from '../contexts/LoctasticContext';
 import MenuItem from './MenuItem';
 import { itemCategories, menuItem } from '../App';
-import NavBar from './NavBar';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,7 +30,6 @@ export default function Home() {
     const { menuItems } = useContext(LoctasticContext);
     return (
         <div className={classes.root}>
-            {<NavBar />}
             <div className={classes.root}>
                 <h2>Welcome, John Doe!</h2>
             </div>

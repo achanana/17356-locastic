@@ -1,7 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { useContext } from 'react';
 import { LoctasticContext } from '../contexts/LoctasticContext';
-import NavBar from './NavBar';
 import React from "react";
 import CartItemView from './CartItem';
 import { Button, Grid, List, ListItem, Typography } from '@material-ui/core';
@@ -42,7 +41,6 @@ export default function CartPageView() {
     }
     return (
         <div className={classes.root}>
-            <NavBar />
             <Grid container spacing={10}>
                 <Grid item xs={6}>
                     <List className={classes.cartList}>
