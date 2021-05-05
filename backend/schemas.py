@@ -12,6 +12,7 @@ db.myColl.drop()
 db.create_collection("myColl")  # Force create!
 
 
+# Order Schema for testing
 vexpr = {
             "$jsonSchema": {
                 "bsonType": "object",
@@ -24,7 +25,7 @@ vexpr = {
                     "items": {
                         "bsonType": "array",
                         "items": {
-                            "bsonType": "int"
+                            "bsonType": "string"
                         },
                         "description": "must be an array of objects and is required"
                     },
@@ -48,11 +49,11 @@ cmd = OrderedDict([('collMod', 'myColl'),
 db.command(cmd)
 
 
-
+# Seller Schema for testing
 vexpr = {
             "$jsonSchema": { 
                     "bsonType": "object",
-                    "required": ["id","name","order_ids", "products"],
+                    "required": ["id","name","order_ids", "items"],
                     "properties": {
                         "id": 
                         {
@@ -72,7 +73,7 @@ vexpr = {
                             },
                             "description": "must be an array of objects and is required"
                         },
-                        "products": {
+                        "items": {
                             "bsonType": "array",
                             "items": 
                             {
@@ -89,7 +90,7 @@ cmd = OrderedDict([('collMod', 'myColl'),
 
 db.command(cmd)
 
-
+# Menu Item Schema for testing
 vexpr = {
             "$jsonSchema": {
                 "bsonType": "object",
@@ -127,27 +128,34 @@ db.command(cmd)
 
 backend_app = Flask(__name__)
 
-next_order_id = 1
-next_seller_id = 1
-next_item_id = 1
+# next_order_id = 1
+# next_seller_id = 1
+# next_item_id = 1
 
-orders = []
-order_items = []
-sellers = []
-menu_items = []
+# orders = []
+mongOrders = db["orders"]
 
-# order = {
-#     "order_id": 3
-#     "items": [1,2,3]
-#     "date": 
-#     "deliveryAddress":
+# order_items = []
+mongOrderItems = db["order_items"]
+
+# sellers = []
+mongSellers = db["sellers"]
+
+# menu_items = []
+mongoMenuItems = db["menu_items"]
+
+# order1 = {
+#     "order_id": 3,
+#     "items": ["Cake","Donuts"],
+#     "date": "",
+#     "deliveryAddress": ""
 # }
 
 
 # seller1 = {
 #     "id": 1,
 #     "name": "Christine",
-#     "order_ids": [1,2,3].
+#     "order_ids": [1,2,3],
 #     "items": ["Cake","Donuts"]
 # }
 
@@ -156,7 +164,7 @@ menu_items = []
 #     "name": "Chocolate muffin",
 #     "price": "4.5",
 #     "qty_avail": 10,
-#     "seller_id": 1,
+#     "seller_id": 1
 # }
 
 
@@ -174,7 +182,11 @@ menu_items = []
 # Display all products on the homepage
 @backend_app.route('/homepage_items', methods=['GET'])
 def homepage_items():
-    response_dict = {"menu_items": menu_items}
+    mItems = []
+    for item in mongoMenuItems.find(): 
+        mItems.append(item)
+    
+    response_dict = {"menu_items": mItems} # Change to MONGO?
     response = jsonify(response_dict)
     response.status_code = 200
     return response
@@ -183,7 +195,7 @@ def homepage_items():
 @backend_app.route('/seller_info/<id>', methods=['GET'])
 def seller_info(id):
     response = None
-    for seller in sellers:
+    for seller in mongSellers.find():
         if seller["id"] == int(id):
             response = jsonify(seller)
             break
@@ -199,31 +211,40 @@ def seller_info(id):
 @backend_app.route('/add_order', methods=['POST'])
 def add_order():
     order = request.get_json()
+    print(order)
     if order is None:
         return Response(status=409)
     if "items" not in order:
       return Response(status=409)
     
+    # Getting last used Order ID iterating through all the mongOrders
+    oID = 0
+    for oItems in mongOrders.find():
+        oID = oItems["id"]
+    
+    oID += 1
 
-    global next_order_id 
-    order["id"] = next_order_id
+    order["id"] = oID
+
     # Build response to return assigned order id to customer 
-    response = jsonify({"order_id": order["id"] })
+    response = jsonify({"order_id": order["id"]})
     # response = jsonify(order)
-    next_order_id += 1 # Change this to MONGO!
+
     response.status_code = 200
-    orders.append(order) # Change this to MONGO!
+    mongOrders.insert_one(order)
+    # orders.append(order) # Change this to MONGO!
     
     print("added order")
     # Need to look for which items from the order
     # are sold by which sellers and add the order_id
     # to the respective seller_ids
     for item in order["items"]:
-        for seller in sellers:
+        for seller in mongSellers.find(): # CHANGED TO MONGO
             if item in seller["items"]:
-                seller["order_ids"].append(order["id"])
+                seller["order_ids"].insert_one(order["id"]) # CHANGED TO MONGO
                 break
-    
+    # print(mongOrders.find())
+
     return response
 
 
@@ -234,13 +255,24 @@ def add_seller():
     if seller is None:
         return Response(status=409)
 
-    global next_seller_id
-    seller["id"] = next_seller_id # Change this to MONGO!
-    # Build response to return assigned seller id to seller 
+    # global next_seller_id
+    # seller["id"] = next_seller_id # Change this to MONGO!
+
+    # Getting last used Seller ID iterating through all the mongOrders
+    sID = 0
+    for sItems in mongSellers.find():
+        sID = sItems["id"]
+    
+    sID += 1
+
+    seller["id"] = sId
+
+
+    # Build response to return assigned seller id to seller
     response = jsonify({"seller_id": seller["id"] })
-    next_seller_id += 1 # Change this to MONGO!
+    # next_seller_id += 1 # Change this to MONGO!
     response.status_code = 200
-    sellers.append(seller) # Change this to MONGO!
+    mongSellers.insert_one(seller) # Change this to MONGO!
     
     return response
 
@@ -251,7 +283,7 @@ def add_seller():
 def seller_orders(seller_id):
 
     response = None
-    for seller in sellers: # Change this to MONGO!
+    for seller in mongSellers.find(): # Change this to MONGO!
         if seller["id"] == seller_id:
             response = jsonify(seller['order_ids'])
             break
@@ -271,16 +303,21 @@ def add_item(seller_id):
 
         if item is None:
             return Response(status=409)
+        
+        # Getting last used Menu Item ID iterating through all the mongOrders
+        mID = 0
+        for mItems in mongoMenuItems.find():
+            mID = mItems["id"]
+        
+        mID += 1
 
-        global next_item_id
-        item["id"] = next_item_id
-        next_item_id += 1
+        item["id"] = mID
 
-        menu_items.append(item) # Change this to MONGO!
+        mongoMenuItems.insert_one(item) # Change this to MONGO!
 
-        for seller in sellers:
+        for seller in mongSellers.find():
           if seller["id"] == int(seller_id):
-                seller["items"].append(item["id"])
+                seller["items"].insert_one(item["id"]) # This could be a bug
                 break
 
         # Build response to return item_id to seller
@@ -303,17 +340,17 @@ def remove_item(seller_id):
             return Response(status=409)
 
         flag = 0
-        for seller in sellers:
+        for seller in mongSellers.find():
             if seller["id"] == seller_id:
                 if item["id"] in seller["items"]:
-                    seller["items"].remove(item["id"])
+                    seller["items"].delete_one(item["id"])
                     flag = 1
                 break
 
 
-        for it in menu_items:
+        for it in mongoMenuItems.find():
           if it["id"] == item["id"]:
-                menu_items.remove(it)
+                mongoMenuItems.delete_one(it)
                 break
 
         if flag == 0:

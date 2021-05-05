@@ -12,12 +12,12 @@ order_items = []
 sellers = []
 menu_items = []
 
-# order = {
-#     "order_id": 3
-#     "items": [1,2,3]
-#     "date": 
-#     "deliveryAddress":
-# }
+order = {
+    "order_id": 3,
+    "items": [1,2,3],
+    "date": "",
+    "deliveryAddress": ""
+}
 
 
 # seller1 = {
@@ -72,7 +72,9 @@ def seller_info(id):
 # Add/Place new order  
 @backend_app.route('/add_order', methods=['POST'])
 def add_order():
+    print("I'm here")
     order = request.get_json()
+    print(order)
     if order is None:
         return Response(status=409)
     if "items" not in order:
