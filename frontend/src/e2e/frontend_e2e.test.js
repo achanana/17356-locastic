@@ -17,7 +17,7 @@ beforeAll(async () => {
         userAgent: ''
     });
     await page.goto('http://localhost:3000');
-});
+}, 20000);
 
 describe('e2e test', () => {
     test('renders tiles from backend', async () => {
