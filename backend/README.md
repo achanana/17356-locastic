@@ -1,6 +1,9 @@
 # Backend APIs Documentation
 
+
 ## Here, you can see how are all the backend APIs work for different types of requests. We demonstrate the workflow of the backend side of the application below:
+
+
 
 ## The APIs part of the Backend are:
 
@@ -13,7 +16,11 @@
 7. Remove Item -> Delete
 
 
+
+
 ## Below is a sample flow of the APIs along with the requests and their respective response.
+
+
 
 
 ### Initial State when app starts (no items or sellers)
