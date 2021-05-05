@@ -170,15 +170,18 @@ def add_item(seller_id):
 # Remove an item from the product list for a seller
 @backend_app.route('/remove_item/<seller_id>', methods=['DELETE'])
 def remove_item(seller_id):
-    if request.method == 'POST':
+    if request.method == 'DELETE':
 
         item = request.get_json()
         if item is None:
+            print("item is None")
             return Response(status=409)
 
         flag = 0
+        # print(seller_id)
         for seller in sellers:
-            if seller["id"] == seller_id:
+            if seller["id"] == int(seller_id):
+                print("seller found",seller)
                 if item["id"] in seller["items"]:
                     seller["items"].remove(item["id"])
                     flag = 1
@@ -191,6 +194,7 @@ def remove_item(seller_id):
                 break
 
         if flag == 0:
+            print("Flag zero")
             return Response(status=409)
         else:
             return Response(status=200)
