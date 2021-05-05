@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 import { LoctasticContext } from '../contexts/LoctasticContext';
 import { useParams } from "react-router-dom";
@@ -7,9 +6,9 @@ import { itemCategories } from '../App';
 import { IconButton } from '@material-ui/core';
 
 const ItemPage = () => {
-    let { id } = useParams();
-    id = Number(id)
     const { menuItems, customerCart, addItemToCart, removeItemFromCart } = useContext(LoctasticContext);
+    const params = useParams()
+    const id = (params as any)?.id
     const menuItem = menuItems.filter(menuItem => menuItem.id == Number(id))[0]
 
     return (
@@ -33,7 +32,7 @@ const ItemPage = () => {
                     <Row justify="center">
                         <Col span={16}>
                             <Button size='large' style={{ height: '60px', }}>
-                                <Row><Text b style={{ 'margin-right': '10px' }}>Add to cart</Text></Row>
+                                <Row><Text b style={{ marginRight: '10px' }}>Add to cart</Text></Row>
                                 <IconButton color='secondary' onClick={()=>{removeItemFromCart(menuItem)}}>-</IconButton>
                                 {customerCart.getQty(menuItem)}
                                 <IconButton color='secondary' onClick={()=>{addItemToCart(menuItem)}}>+</IconButton>
