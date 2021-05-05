@@ -3,10 +3,10 @@ import { LoctasticContext } from '../contexts/LoctasticContext';
 import { useParams } from "react-router-dom";
 import { Text, Row, Col, Page, Description, Tag, Image, Button } from '@geist-ui/react'
 import { itemCategories } from '../App';
-import { IconButton } from '@material-ui/core';
+import { CartToggle } from '../components'
 
 const ItemPage = () => {
-    const { menuItems, customerCart, addItemToCart, removeItemFromCart } = useContext(LoctasticContext);
+    const { menuItems } = useContext(LoctasticContext);
     const params = useParams()
     const id = (params as any)?.id
     const menuItem = menuItems.filter(menuItem => menuItem.id == Number(id))[0]
@@ -33,9 +33,7 @@ const ItemPage = () => {
                         <Col span={16}>
                             <Button size='large' style={{ height: '60px', }}>
                                 <Row><Text b style={{ marginRight: '10px' }}>Add to cart</Text></Row>
-                                <IconButton color='secondary' onClick={()=>{removeItemFromCart(menuItem)}}>-</IconButton>
-                                {customerCart.getQty(menuItem)}
-                                <IconButton color='secondary' onClick={()=>{addItemToCart(menuItem)}}>+</IconButton>
+                                <CartToggle menuItem={menuItem} />
                             </Button>
                         </Col>
                     </Row>

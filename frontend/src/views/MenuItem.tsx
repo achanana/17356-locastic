@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, CardMedia, Grid, IconButton, Typography } from '@material-ui/core';
+import { Card, CardContent, CardMedia, Grid, Typography } from '@material-ui/core';
 import { menuItem } from '../App';
-import { LoctasticContext } from '../contexts/LoctasticContext';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
+import { CartToggle } from '../components'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,12 +23,6 @@ const useStyles = makeStyles(theme => ({
       width: 151,
       alignItems: 'right',
     },
-    controls: {
-      display: 'flex',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
-    },
     playIcon: {
       height: 38,
       width: 38,
@@ -41,7 +35,6 @@ interface Props {
 
 export default function MenuItem(props : Props) {
     const classes = useStyles();
-    const { customerCart, addItemToCart, removeItemFromCart } = useContext(LoctasticContext);
 
     return (
         <Grid item xs={4}>
@@ -57,11 +50,7 @@ export default function MenuItem(props : Props) {
                             ${props.menuItem.price} / unit
                         </Typography>
                     </CardContent>
-                    <div className={classes.controls}>
-                      <IconButton color="secondary" onClick={()=>{removeItemFromCart(props.menuItem)}}>-</IconButton>
-                      {customerCart.getQty(props.menuItem)}
-                      <IconButton color="secondary" onClick={()=>{addItemToCart(props.menuItem)}}>+</IconButton>
-                    </div>
+                    <CartToggle menuItem={props.menuItem} />
                 </div>
                 <CardMedia className={classes.cover} image={props.menuItem.image} title="Another menu item" />
             </Card>
