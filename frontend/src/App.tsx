@@ -84,7 +84,7 @@ export default function App() {
   }
   return (
     <LoctasticContextProvider value={{ menuItems, customerCart, addItemToCart, removeItemFromCart }}>
-    <div>
+    <div style={{backgroundColor: '#f2e9da'}}>
       <Router>
         <NavBar />
         <Switch>
