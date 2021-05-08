@@ -1,0 +1,18 @@
+{
+  "editor.rulers": [120],
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "editor.trimAutoWhitespace": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll": true,
+    "addMissingImports": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  "files.trimTrailingWhitespace": true,
+
+  "typescript.preferences.quoteStyle": "single",
+  "eslint.validate": ["javascript", "typescript"]
+}
