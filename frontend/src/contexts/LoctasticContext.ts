@@ -1,14 +1,14 @@
-import { createContext } from "react";
-import { menuItem } from "../App";
-import Cart from "../Cart";
+import { createContext } from 'react'
+import { menuItem } from '../App'
+import Cart from '../Cart'
 
-const defaultMenuItems: menuItem[] = [];
+const defaultMenuItems: menuItem[] = []
 
 interface LoctasticContextInterface {
-  menuItems: menuItem[];
-  customerCart: Cart;
-  addItemToCart(menuItem: menuItem): void;
-  removeItemFromCart(menuItem: menuItem): void;
+  menuItems: menuItem[]
+  customerCart: Cart
+  addItemToCart(menuItem: menuItem): void
+  removeItemFromCart(menuItem: menuItem): void
 }
 
 export const LoctasticContext = createContext<LoctasticContextInterface>({
@@ -16,6 +16,6 @@ export const LoctasticContext = createContext<LoctasticContextInterface>({
   customerCart: new Cart(),
   addItemToCart: () => {},
   removeItemFromCart: () => {},
-});
-const LoctasticContextProvider = LoctasticContext.Provider;
-export default LoctasticContextProvider;
+})
+const LoctasticContextProvider = LoctasticContext.Provider
+export default LoctasticContextProvider
