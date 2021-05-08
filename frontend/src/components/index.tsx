@@ -1,3 +1,3 @@
-import CartToggle from '../components/CartToggle'
+import CartToggle from './CartToggle'
 
 export { CartToggle }

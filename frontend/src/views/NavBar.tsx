@@ -5,6 +5,7 @@ import Link from '@material-ui/core/Link';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import React, { useContext } from "react";
 import { LoctasticContext } from "../contexts/LoctasticContext";
+import Logo from '../images/locastic-logo.svg'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -15,9 +16,15 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         textAlign: 'center',
         fontSize: '2ch',
+        overflow: 'hidden',
     },
     navBar: {
-    }
+        backgroundColor: '#f6f3e7',
+    },
+    logo: {
+        margin: '-125px -100px -125px -100px',
+        height: '350px',
+    },
 }))
 
 export default function NavBar() {
@@ -29,7 +36,7 @@ export default function NavBar() {
             <Toolbar>       
                 <Typography className={classes.title}>
                     <Link component={RouterLink} color='inherit' to='/'>
-                        Loctastic
+                        <img src={Logo} alt="Locastic" className={classes.logo} />
                     </Link>
                 </Typography>
                 <Button component={RouterLink} to="/cart">
