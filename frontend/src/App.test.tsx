@@ -6,7 +6,6 @@ import store from './store/store'
 
 test('renders landing page', () => {
   const testStore = store
-  // utilise initialState to preload our state
   const app = (
     <StoreProvider store={testStore}>
       <App />
