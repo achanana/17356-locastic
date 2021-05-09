@@ -74,7 +74,7 @@ def seller_info(id):
 def item_info(id):
     response = None
     for item in menu_items:
-        if menu_items["id"] == int(id):
+        if item["id"] == int(id):
             response = jsonify(item)
             break
     if response == None:
