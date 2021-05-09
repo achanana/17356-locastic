@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request, jsonify, Response
+import os
 
 backend_app = Flask(__name__)
 
@@ -201,7 +202,8 @@ def remove_item(seller_id):
 
 if __name__ == '__main__':
     # manager_server.run(host="localhost", port=int(sys.argv[2]))
-    backend_app.run(host="localhost", port=8080)
+    port = int(os.environ.get('PORT'))
+    backend_app.run(host="0.0.0.0", port=port)
 
 
 '''
