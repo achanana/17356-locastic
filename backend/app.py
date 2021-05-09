@@ -62,12 +62,29 @@ def seller_info(id):
             response = jsonify(seller)
             break
     if response == None:
-        print("here")
+        # print("here")
         response = jsonify({})
         response.status_code = 409
     else:
         response.status_code = 200
     return response
+
+# Get information of a particular item
+@backend_app.route('/item_info/<id>', methods=['GET'])
+def item_info(id):
+    response = None
+    for item in menu_items:
+        if menu_items["id"] == int(id):
+            response = jsonify(item)
+            break
+    if response == None:
+        # print("here")
+        response = jsonify({})
+        response.status_code = 409
+    else:
+        response.status_code = 200
+    return response
+
 
 # Add/Place new order  
 @backend_app.route('/add_order', methods=['POST'])
