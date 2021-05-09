@@ -1,4 +1,4 @@
-import { menuItem } from "./App";
+import { menuItem } from "./model";
 import { CartItem } from "./CartItem";
 
 interface cartItemDict {
