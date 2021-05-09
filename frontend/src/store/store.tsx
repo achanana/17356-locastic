@@ -1,8 +1,8 @@
 import { createStore, action, thunk, persist } from 'easy-peasy'
-import { StoreModel, menuItem } from "../model"
+import { storeModel, menuItem } from "../model"
 import axios from 'axios'
 
-const store = createStore<StoreModel>(persist({
+const store = createStore<storeModel>(persist({
     menuItems: [],
     setMenuItems: action((state, payload) => {
         state.menuItems = payload

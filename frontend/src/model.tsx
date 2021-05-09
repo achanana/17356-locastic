@@ -15,9 +15,9 @@ export interface menuItem {
     description?: string,
 }
 
-export interface StoreModel {
+export interface storeModel {
     menuItems: menuItem[];
-    setMenuItems: Action<StoreModel, menuItem[]>;
-    fetchMenuItems: Thunk<StoreModel>;
+    setMenuItems: Action<storeModel, menuItem[]>;
+    fetchMenuItems: Thunk<storeModel>;
 }
 

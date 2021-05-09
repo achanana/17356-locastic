@@ -1,7 +1,7 @@
 import { createTypedHooks } from 'easy-peasy';
-import { StoreModel } from './model';
+import { storeModel } from './model';
 
-const typedHooks = createTypedHooks<StoreModel>();
+const typedHooks = createTypedHooks<storeModel>();
 
 export const useStoreActions = typedHooks.useStoreActions;
 export const useStoreDispatch = typedHooks.useStoreDispatch;
