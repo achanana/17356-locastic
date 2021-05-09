@@ -32,7 +32,7 @@ export default function Home() {
 
     useEffect(() => {
         fetchMenuItems()
-    }, [])
+    }, [fetchMenuItems])
 
     return (
         <div className={classes.root}>
