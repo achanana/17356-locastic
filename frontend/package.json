@@ -71,5 +71,5 @@
     "webpack": "^4.44.2",
     "webpack-cli": "^4.6.0"
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "https://locastic-backend.herokuapp.com:21165"
 }
