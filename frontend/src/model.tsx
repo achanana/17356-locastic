@@ -1,8 +1,8 @@
 import { Action, Thunk } from 'easy-peasy';
 
 export enum itemCategories {
-    BakeryItem,
-    GiftBasket,
+    BakeryItem = "BakeryItem",
+    GiftBasket = "GiftBasket",
 }
 
 export interface menuItem {
