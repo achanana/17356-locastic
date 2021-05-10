@@ -1,9 +1,18 @@
-import { Button, Grid, TextField, Typography } from '@material-ui/core'
+import {
+  Button,
+  Grid,
+  InputLabel,
+  Select,
+  TextField,
+  Typography,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useFormik } from 'formik'
 import React, { useContext } from 'react'
 import * as yup from 'yup'
+import { processPayment } from '../api_util/payments_api'
 import { LoctasticContext } from '../contexts/LoctasticContext'
+import { us_states } from '../static_data/us_states'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,7 +60,7 @@ export default function Checkout() {
       .string()
       .required('Last name is required')
       .min(1, 'Last name should not be empty')
-      .max(50, 'Last name should not have more than 50 characters'),
+      .max(50, 'Last ame should not have more than 50 characters'),
     email: yup
       .string()
       .required('Email ID is required')
@@ -59,16 +68,35 @@ export default function Checkout() {
     firstLine: yup
       .string()
       .required('Address first line is required')
-      .min(1, 'Address first line should not be empty')
-      .max(50, 'Address first line should not have more than 50 characters'),
+      .min(1, 'Address Line 1 should not be empty')
+      .max(50, 'Address Line 1 should not have more than 50 characters'),
     secondLine: yup
       .string()
-      .max(50, 'Address first line should not have more than 50 characters'),
+      .max(50, 'Address Line 2 should not have more than 50 characters'),
     city: yup
       .string()
       .min(1, 'City should have at least one character')
       .max(50, 'City should not have more than 50 characters'),
+    state: yup.string().oneOf(Object.keys(us_states)),
+    zip: yup
+      .string()
+      .required()
+      .matches(/^[0-9]+$/, 'Must be only digits')
+      .min(5, 'Zip Code must be 5 digits')
+      .max(5, 'Zip Code must be 5 digits'),
   })
+
+  async function submitOrder() {
+    const transId = await processPayment(customerCart.cartTotal())
+    if (transId !== null) {
+      window.open(
+        'http://credit.17-356.isri.cmu.edu/?transaction_id=' + transId,
+        '_blank',
+      )
+    } else {
+      alert('Payment cannot be processed at this time.')
+    }
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -78,10 +106,13 @@ export default function Checkout() {
       firstLine: '',
       secondLine: '',
       city: '',
+      state: '',
+      zip: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+      alert(JSON.stringify(values))
+      submitOrder()
     },
   })
 
@@ -102,6 +133,7 @@ export default function Checkout() {
               error={
                 formik.touched.firstName && Boolean(formik.errors.firstName)
               }
+              helperText={formik.touched.firstName && formik.errors.firstName}
             />
           </Grid>
           <Grid item>
@@ -112,6 +144,7 @@ export default function Checkout() {
               value={formik.values.lastName}
               onChange={formik.handleChange}
               error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+              helperText={formik.touched.lastName && formik.errors.lastName}
             />
           </Grid>
           <Grid item>
@@ -122,6 +155,7 @@ export default function Checkout() {
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
           </Grid>
           <Grid item>
@@ -137,6 +171,7 @@ export default function Checkout() {
               error={
                 formik.touched.firstLine && Boolean(formik.errors.firstLine)
               }
+              helperText={formik.touched.firstLine && formik.errors.firstLine}
             />
           </Grid>
           <Grid item>
@@ -149,6 +184,7 @@ export default function Checkout() {
               error={
                 formik.touched.secondLine && Boolean(formik.errors.secondLine)
               }
+              helperText={formik.touched.secondLine && formik.errors.secondLine}
             />
           </Grid>
           <Grid item>
@@ -159,6 +195,41 @@ export default function Checkout() {
               value={formik.values.city}
               onChange={formik.handleChange}
               error={formik.touched.city && Boolean(formik.errors.city)}
+              helperText={formik.touched.city && formik.errors.city}
+            />
+          </Grid>
+          <Grid item>
+            <InputLabel htmlFor="">State</InputLabel>
+            <Select
+              native
+              id="state"
+              name="state"
+              label="State"
+              value={formik.values.state}
+              onChange={formik.handleChange}
+              inputProps={{
+                name: 'state',
+                id: 'state',
+              }}
+              error={formik.touched.state && Boolean(formik.errors.state)}
+            >
+              <option aria-label="None" value="" />
+              {Object.keys(us_states).map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </Select>
+          </Grid>
+          <Grid item>
+            <TextField
+              id="zip"
+              name="zip"
+              label="Zip Code"
+              value={formik.values.zip}
+              onChange={formik.handleChange}
+              error={formik.touched.zip && Boolean(formik.errors.zip)}
+              helperText={formik.touched.zip && formik.errors.zip}
             />
           </Grid>
           <Grid item>
