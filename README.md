@@ -1,4 +1,4 @@
-# Loctastic
+# Locastic
 
 Frontend deployed @ https://loctastic-frontend.herokuapp.com/
 
