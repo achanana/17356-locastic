@@ -10,8 +10,6 @@ const store = createStore<storeModel>(persist({
     fetchMenuItems: thunk(async actions => {
         let menuItems: menuItem[] = []
         try {
-            console.log('Backend URL is ' + process.env.REACT_APP_BACKEND_URL)
-            console.log('Node env is ' + process.env.NODE_ENV)
             const { data } = await axios.get(process.env.REACT_APP_BACKEND_URL + '/homepage_items')
             menuItems = data.menu_items
             actions.setMenuItems(menuItems);
