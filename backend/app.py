@@ -49,14 +49,29 @@ def seller_info(id):
             response = jsonify(seller)
             break
     if response == None:
-        print("here")
+        # print("here")
         response = jsonify({})
         response.status_code = 409
     else:
         response.status_code = 200
     return response
 
-# Add/Place new order
+# Get information of a particular item
+@backend_app.route('/item_info/<id>', methods=['GET'])
+def item_info(id):
+    response = None
+    for item in menu_items:
+        if item["id"] == int(id):
+            response = jsonify(item)
+            break
+    if response == None:
+        # print("here")
+        response = jsonify({})
+        response.status_code = 409
+    else:
+        response.status_code = 200
+    return response
+
 @backend_app.route('/add_order', methods=['POST'])
 def add_order():
     order = request.get_json()
@@ -161,13 +176,14 @@ def remove_item(seller_id):
 
         item = request.get_json()
         if item is None:
+            print("item is None")
             return Response(status=409)
 
         flag = 0
-
+        # print(seller_id)
         for seller in sellers:
             if seller["id"] == int(seller_id):
-
+                print("seller found",seller)
                 if item["id"] in seller["items"]:
                     seller["items"].remove(item["id"])
                     flag = 1
@@ -180,6 +196,7 @@ def remove_item(seller_id):
                 break
 
         if flag == 0:
+            print("Flag zero")
             return Response(status=409)
         else:
             return Response(status=200)
