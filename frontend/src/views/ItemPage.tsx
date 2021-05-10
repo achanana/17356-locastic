@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { LoctasticContext } from '../contexts/LoctasticContext';
 import { useParams } from "react-router-dom";
 import { Text, Row, Col, Page, Description, Tag, Image, Button } from '@geist-ui/react'
-import { itemCategories } from '../App';
+import { itemCategories } from '../model';
 import { CartToggle } from '../components'
 
 const ItemPage = () => {

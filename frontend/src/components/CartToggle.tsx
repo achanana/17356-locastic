@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { IconButton, Typography } from '@material-ui/core';
 
 import { LoctasticContext } from '../contexts/LoctasticContext';
-import { menuItem } from '../App';
+import { menuItem } from '../model';
 
 
 const useStyles = makeStyles((theme) => ({

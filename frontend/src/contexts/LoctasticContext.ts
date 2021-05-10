@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { menuItem } from "../App";
+import { menuItem } from "../model";
 import Cart from "../Cart";
 
 const defaultMenuItems: menuItem[] = [];
