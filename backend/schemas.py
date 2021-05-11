@@ -144,6 +144,10 @@ mongSellers = db["sellers"]
 # menu_items = []
 mongoMenuItems = db["menu_items"]
 
+mongoItemIDs = db["item_ids"]
+mongoSellerIDs = db["seller_ids"]
+mongoOrderIDs = db["order_ids"]
+
 # order1 = {
 #     "order_id": 3,
 #     "items": ["Cake","Donuts"],
@@ -223,7 +227,7 @@ def add_order():
     
     # Getting last used Order ID iterating through all the mongOrders
     oID = 0
-    for oItems in mongOrders.find():
+    for oItems in mongoOrderIDs.find():
         oID = oItems["id"]
     
     oID += 1
@@ -236,6 +240,7 @@ def add_order():
 
     response.status_code = 200
     mongOrders.insert_one(order)
+    mongoOrderIDs.insert_one(order)
     # orders.append(order) # Change this to MONGO!
     
     print("added order")
@@ -266,7 +271,7 @@ def add_seller():
 
     # Getting last used Seller ID iterating through all the mongOrders
     sID = 0
-    for sItems in mongSellers.find():
+    for sItems in mongoSellerIDs.find():
         sID = sItems["id"]
     
     sID += 1
@@ -279,6 +284,7 @@ def add_seller():
     # next_seller_id += 1 # Change this to MONGO!
     response.status_code = 200
     mongSellers.insert_one(seller) # Change this to MONGO!
+    mongoSellerIDs.insert_one(seller)
     
     return response
 
@@ -312,7 +318,7 @@ def add_item(seller_id):
         
         # Getting last used Menu Item ID iterating through all the mongOrders
         mID = 0
-        for mItems in mongoMenuItems.find():
+        for mItems in mongoItemIDs.find():
             mID = mItems["id"]
         
         mID += 1
@@ -320,6 +326,7 @@ def add_item(seller_id):
         item["id"] = mID
 
         mongoMenuItems.insert_one(item) # Change this to MONGO!
+        mongoItemIDs.insert_one(item)
 
         for seller in mongSellers.find():
           
@@ -374,6 +381,25 @@ def remove_item(seller_id):
             return Response(status=409)
         else:
             return Response(status=200)
+
+
+# Get information of a particular item
+@backend_app.route('/item_info/<id>', methods=['GET'])
+def item_info(id):
+    response = None
+    for item in mongoMenuItems.find():
+        if item["id"] == int(id):
+            del(item['_id'])
+            response = jsonify(item)
+            break
+    if response == None:
+        # print("here")
+        response = jsonify({})
+        response.status_code = 409
+    else:
+        response.status_code = 200
+    return response
+
 
 
 
