@@ -15,6 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Add frontend remote origin
-        run: git remote add heroku-loctastic-frontend https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/loctastic-frontend.git
+        run: git remote add heroku-frontend https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/locastic.git
       - name: Deploy frontend to Heroku
-        run: git push heroku-loctastic-frontend `git subtree split --prefix frontend main`:refs/heads/main --force
+        run: git push heroku-frontend `git subtree split --prefix frontend main`:refs/heads/main --force

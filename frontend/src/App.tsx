@@ -9,26 +9,13 @@ import cookieGiftBasket from './images/cookieGiftBasket.jpg';
 import 'fontsource-roboto';
 import Cart from './Cart';
 import { CartPageView, Checkout, ItemPage, NavBar } from './views'
+import { menuItem, itemCategories } from './model'
 
 import {
   BrowserRouter as Router,
   Route,
   Switch
 } from 'react-router-dom';
-
-export enum itemCategories {
-  BakeryItem,
-  GiftBasket,
-}
-export interface menuItem {
-  id: number,
-  name: string,
-  price: number,
-  image: string,
-  seller: string,
-  category: itemCategories,
-  description?: string,
-}
 
 const defaultDescription = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tristique, mi nec interdum blandit, justo lacus suscipit arcu, at porta magna metus sed lacus. Nullam in nunc vitae turpis ullamcorper tempor at eget leo. Curabitur condimentum ipsum id velit porta consectetur. Aliquam eget velit non ipsum dapibus suscipit id sed nisi. Ut viverra velit eu mi placerat, in consequat leo blandit. Suspendisse tristique quam id odio mattis elementum. Cras elementum tellus at volutpat pulvinar. Fusce vehicula sollicitudin tempus. Suspendisse potenti. Quisque rhoncus iaculis neque eget vestibulum. Quisque tempus pretium ligula non euismod."
 
@@ -76,7 +63,6 @@ export default function App() {
   const addItemToCart = (menuItem: menuItem) => {
     const newCart = new Cart().setTo(customerCart).incrementQty(menuItem);
     setCustomerCart(newCart);
-    console.log(customerCart);
   }
   const removeItemFromCart = (menuItem: menuItem) => {
     const newCart = new Cart().setTo(customerCart).decrementQty(menuItem);

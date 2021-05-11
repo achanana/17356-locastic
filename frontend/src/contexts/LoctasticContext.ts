@@ -1,6 +1,6 @@
 import { createContext } from 'react'
-import { menuItem } from '../App'
 import Cart from '../Cart'
+import { menuItem } from '../model'
 
 const defaultMenuItems: menuItem[] = []
 

@@ -1,5 +1,5 @@
-import { menuItem } from './App'
 import { CartItem } from './CartItem'
+import { menuItem } from './model'
 
 interface cartItemDict {
   [id: number]: CartItem

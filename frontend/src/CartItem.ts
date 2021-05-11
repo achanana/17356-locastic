@@ -1,4 +1,4 @@
-import { menuItem } from './App'
+import { menuItem } from './model'
 
 export class CartItem {
   quantity: number
