@@ -13,7 +13,7 @@ db.create_collection("myColl")  # Force create!
 
 
 # Order Schema for testing
-vexpr = {
+vexprOrder = {
             "$jsonSchema": {
                 "bsonType": "object",
                 "required": ["order_id","items","date", "deliveryAddress"],
@@ -43,14 +43,14 @@ vexpr = {
         }
 
 cmd = OrderedDict([('collMod', 'myColl'),
-        ('validator', vexpr),
+        ('validator', vexprOrder),
         ('validationLevel', 'moderate')])
 
 db.command(cmd)
 
 
 # Seller Schema for testing
-vexpr = {
+vexprSeller = {
             "$jsonSchema": { 
                     "bsonType": "object",
                     "required": ["id","name","order_ids", "items"],
@@ -85,13 +85,13 @@ vexpr = {
         }
 
 cmd = OrderedDict([('collMod', 'myColl'),
-        ('validator', vexpr),
+        ('validator', vexprSeller),
         ('validationLevel', 'moderate')])
 
 db.command(cmd)
 
 # Menu Item Schema for testing
-vexpr = {
+vexprMenu = {
             "$jsonSchema": {
                 "bsonType": "object",
                 "required": ["id","name","price", "qty_avail", "seller_id"],
@@ -121,7 +121,7 @@ vexpr = {
 }
 
 cmd = OrderedDict([('collMod', 'myColl'),
-        ('validator', vexpr),
+        ('validator', vexprMenu),
         ('validationLevel', 'moderate')])
 
 db.command(cmd)
@@ -184,8 +184,11 @@ mongoMenuItems = db["menu_items"]
 def homepage_items():
     mItems = []
     for item in mongoMenuItems.find(): 
+        del(item['_id'])
         mItems.append(item)
+
     
+    print(mItems)
     response_dict = {"menu_items": mItems} # Change to MONGO?
     response = jsonify(response_dict)
     response.status_code = 200
@@ -197,6 +200,7 @@ def seller_info(id):
     response = None
     for seller in mongSellers.find():
         if seller["id"] == int(id):
+            del(seller['_id'])
             response = jsonify(seller)
             break
     if response == None:
@@ -241,7 +245,9 @@ def add_order():
     for item in order["items"]:
         for seller in mongSellers.find(): # CHANGED TO MONGO
             if item in seller["items"]:
-                seller["order_ids"].insert_one(order["id"]) # CHANGED TO MONGO
+                new_seller = seller
+                new_seller["order_ids"].append(order["id"]) # CHANGED TO MONGO
+                mongSellers.find_one_and_replace({'_id': seller["_id"]}, new_seller)
                 break
     # print(mongOrders.find())
 
@@ -265,7 +271,7 @@ def add_seller():
     
     sID += 1
 
-    seller["id"] = sId
+    seller["id"] = sID
 
 
     # Build response to return assigned seller id to seller
@@ -316,8 +322,17 @@ def add_item(seller_id):
         mongoMenuItems.insert_one(item) # Change this to MONGO!
 
         for seller in mongSellers.find():
+          
+        #   print("Seller ID in mongo: " + str(seller["id"]))
+        #   print("Seller ID in schemas.py: " + str(seller_id))
           if seller["id"] == int(seller_id):
-                seller["items"].insert_one(item["id"]) # This could be a bug
+                # print(seller["items"])
+                new_seller = seller
+                new_seller["items"].append(item["id"]) # This could be a bug
+                print(new_seller)
+                
+                # print(seller["items"])
+                mongSellers.find_one_and_replace({'_id': seller["_id"]}, new_seller)
                 break
 
         # Build response to return item_id to seller
@@ -333,24 +348,26 @@ def add_item(seller_id):
 # Remove an item from the product list for a seller
 @backend_app.route('/remove_item/<seller_id>', methods=['DELETE'])
 def remove_item(seller_id):
-    if request.method == 'POST':
-
+    if request.method == 'DELETE':
+        
         item = request.get_json()
         if item is None:
             return Response(status=409)
 
         flag = 0
         for seller in mongSellers.find():
-            if seller["id"] == seller_id:
+            if seller["id"] == int(seller_id):
                 if item["id"] in seller["items"]:
-                    seller["items"].delete_one(item["id"])
+                    new_seller = seller
+                    new_seller["items"].remove(item["id"]) # This could be a bug
+                    mongSellers.find_one_and_replace({'_id': seller["_id"]}, new_seller)
                     flag = 1
                 break
 
 
         for it in mongoMenuItems.find():
           if it["id"] == item["id"]:
-                mongoMenuItems.delete_one(it)
+                mongoMenuItems.delete_one(it) 
                 break
 
         if flag == 0:
