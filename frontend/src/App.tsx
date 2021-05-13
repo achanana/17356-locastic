@@ -15,7 +15,7 @@ import {
   Footer,
   ItemPage,
   NavBar,
-  SellerLogin,
+  SellerSignUpForm,
 } from './views'
 import Home from './views/Home'
 
@@ -88,8 +88,8 @@ export default function App() {
             <Route path="/item/:id">
               <ItemPage />
             </Route>
-            <Route path="/seller-login">
-              <SellerLogin />
+            <Route path="/seller-signup">
+              <SellerSignUpForm />
             </Route>
             <Route path="/">
               <Home />

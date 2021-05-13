@@ -6,7 +6,7 @@ import Home from './Home'
 import ItemPage from './ItemPage'
 import MenuItem from './MenuItem'
 import NavBar from './NavBar'
-import SellerLogin from './SellerLogin'
+import SellerSignUpForm from './SellerSignupForm'
 
 export {
   CartItemView,
@@ -15,7 +15,7 @@ export {
   Home,
   ItemPage,
   MenuItem,
-  SellerLogin,
   NavBar,
   Footer,
+  SellerSignUpForm,
 }
