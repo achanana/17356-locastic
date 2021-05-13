@@ -1,5 +1,5 @@
-# Loctastic
+# Locastic
 
-Frontend deployed @ https://loctastic-frontend.herokuapp.com/
+Frontend deployed @ https://locastic.herokuapp.com/
 
-Backend deployed @ https://loctastic-backend.herokuapp.com/
+Backend deployed @ https://locastic-backend.herokuapp.com/

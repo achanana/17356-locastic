@@ -3,6 +3,12 @@ from flask import Flask
 from flask import request, jsonify, Response
 from collections import OrderedDict
 import sys
+import os
+from flask_cors import CORS
+
+
+backend_app = Flask(__name__)
+CORS(backend_app)
 
 client = MongoClient(port=27017)
 
@@ -126,11 +132,12 @@ cmd = OrderedDict([('collMod', 'myColl'),
 
 db.command(cmd)
 
-backend_app = Flask(__name__)
+
 
 # next_order_id = 1
 # next_seller_id = 1
 # next_item_id = 1
+
 
 # orders = []
 mongOrders = db["orders"]
@@ -182,6 +189,28 @@ mongoOrderIDs = db["order_ids"]
 # def hello_world():
 #     return 'Hello, World!'
 
+orders = []
+order_items = []
+sellers = []
+
+default_menu_items = [
+    {
+        'id': 1,
+        'name': 'Blueberry muffin',
+        'price': 5,
+        'image': 'https://www.onceuponachef.com/images/2014/07/Best-Blueberry-Muffins2-1024x660.jpg',
+        'seller': 'John',
+        'category': 'BakeryItem',
+        'description': 'A blueberry muffin'
+    }
+]
+
+if (os.environ.get('GITHUB_ACTIONS')):
+    menu_items = default_menu_items
+else:
+    menu_items = []
+
+
 
 # Display all products on the homepage
 @backend_app.route('/homepage_items', methods=['GET'])
@@ -208,14 +237,29 @@ def seller_info(id):
             response = jsonify(seller)
             break
     if response == None:
-        print("here")
+        # print("here")
         response = jsonify({})
         response.status_code = 409
     else:
         response.status_code = 200
     return response
 
-# Add/Place new order  
+# Get information of a particular item
+@backend_app.route('/item_info/<id>', methods=['GET'])
+def item_info(id):
+    response = None
+    for item in menu_items:
+        if item["id"] == int(id):
+            response = jsonify(item)
+            break
+    if response == None:
+        # print("here")
+        response = jsonify({})
+        response.status_code = 409
+    else:
+        response.status_code = 200
+    return response
+
 @backend_app.route('/add_order', methods=['POST'])
 def add_order():
     order = request.get_json()
@@ -224,6 +268,7 @@ def add_order():
         return Response(status=409)
     if "items" not in order:
       return Response(status=409)
+
     
     # Getting last used Order ID iterating through all the mongOrders
     oID = 0
@@ -236,14 +281,17 @@ def add_order():
 
     # Build response to return assigned order id to customer 
     response = jsonify({"order_id": order["id"]})
+
     # response = jsonify(order)
 
     response.status_code = 200
+
     mongOrders.insert_one(order)
     mongoOrderIDs.insert_one(order)
     # orders.append(order) # Change this to MONGO!
     
-    print("added order")
+
+    # print("added order")
     # Need to look for which items from the order
     # are sold by which sellers and add the order_id
     # to the respective seller_ids
@@ -254,6 +302,7 @@ def add_order():
                 new_seller["order_ids"].append(order["id"]) # CHANGED TO MONGO
                 mongSellers.find_one_and_replace({'_id': seller["_id"]}, new_seller)
                 break
+
     # print(mongOrders.find())
 
     return response
@@ -278,11 +327,11 @@ def add_seller():
 
     seller["id"] = sID
 
-
     # Build response to return assigned seller id to seller
     response = jsonify({"seller_id": seller["id"] })
     # next_seller_id += 1 # Change this to MONGO!
     response.status_code = 200
+
     mongSellers.insert_one(seller) # Change this to MONGO!
     mongoSellerIDs.insert_one(seller)
     
@@ -305,8 +354,8 @@ def seller_orders(seller_id):
     else:
         response.status_code = 200
     return response
-    
-    
+
+
 # Add a new item to the product list for a seller
 @backend_app.route('/add_item/<seller_id>', methods=['POST'])
 def add_item(seller_id):
@@ -345,8 +394,8 @@ def add_item(seller_id):
         # Build response to return item_id to seller
         # and also add to seller items
         response = jsonify({"item_id": item["id"] })
-        response.status_code = 200        
-       
+        response.status_code = 200
+
         return response
 
 
@@ -356,12 +405,14 @@ def add_item(seller_id):
 @backend_app.route('/remove_item/<seller_id>', methods=['DELETE'])
 def remove_item(seller_id):
     if request.method == 'DELETE':
-        
+
         item = request.get_json()
         if item is None:
+            print("item is None")
             return Response(status=409)
 
         flag = 0
+        
         for seller in mongSellers.find():
             if seller["id"] == int(seller_id):
                 if item["id"] in seller["items"]:
@@ -378,6 +429,7 @@ def remove_item(seller_id):
                 break
 
         if flag == 0:
+            print("Flag zero")
             return Response(status=409)
         else:
             return Response(status=200)
@@ -403,9 +455,20 @@ def item_info(id):
 
 
 
-if __name__ == '__main__':
-    # manager_server.run(host="localhost", port=int(sys.argv[2]))
-    backend_app.run(host="localhost", port=8080)
+# if __name__ == '__main__':
+#     # manager_server.run(host="localhost", port=int(sys.argv[2]))
+#     if (os.environ.get('GITHUB_ACTIONS')):
+#         print("It was true")
+#         menu_items = default_menu_items
+#     else:
+#         print("It wasn't true!")
+#     port = int(os.environ.get('PORT'))
+#     backend_app.run(host="0.0.0.0", port=port)
+
+def create_app():
+    port = int(os.environ.get('PORT'))
+    # backend_app.run(host="127.0.0.1", port=port)
+    return backend_app
 
 
 '''
