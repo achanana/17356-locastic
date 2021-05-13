@@ -201,12 +201,15 @@ default_menu_items = [
         'image': 'https://www.onceuponachef.com/images/2014/07/Best-Blueberry-Muffins2-1024x660.jpg',
         'seller': 'John',
         'category': 'BakeryItem',
-        'description': 'A blueberry muffin'
+        'description': 'A blueberry muffin',
+        'seller
     }
 ]
 
 if (os.environ.get('GITHUB_ACTIONS')):
     menu_items = default_menu_items
+    mongSellers.insert_one(default_menu_items[0])
+    mongoSellerIDs.insert_one(default_menu_items[0])
 else:
     menu_items = []
 
