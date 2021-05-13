@@ -202,14 +202,14 @@ default_menu_items = [
         'seller': 'John',
         'category': 'BakeryItem',
         'description': 'A blueberry muffin',
-        'seller
+        'seller_id': 100
     }
 ]
 
 if (os.environ.get('GITHUB_ACTIONS')):
     menu_items = default_menu_items
-    mongSellers.insert_one(default_menu_items[0])
-    mongoSellerIDs.insert_one(default_menu_items[0])
+    mongoMenuItems.insert_one(default_menu_items[0])
+#     mongoSellerIDs.insert_one("100")
 else:
     menu_items = []
 
