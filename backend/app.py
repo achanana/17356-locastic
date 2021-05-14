@@ -341,6 +341,7 @@ def add_order():
 @backend_app.route('/add_seller', methods=['POST'])
 def add_seller():
     seller = request.get_json()
+
     if seller is None:
         return Response(status=409)
 
@@ -355,6 +356,8 @@ def add_seller():
     sID += 1
 
     seller["id"] = sID
+    seller["order_ids"] = []
+    seller["items"] = []
 
     # Build response to return assigned seller id to seller
     response = jsonify({"seller_id": seller["id"] })
@@ -413,6 +416,7 @@ def add_item(seller_id):
         #   print("Seller ID in mongo: " + str(seller["id"]))
         #   print("Seller ID in schemas.py: " + str(seller_id))
           if seller["id"] == int(seller_id):
+                print(seller)
                 # print(seller["items"])
                 new_seller = seller
                 new_seller["items"].append(item["id"]) # This could be a bug
