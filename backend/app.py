@@ -239,10 +239,27 @@ default_menu_items = [
 @backend_app.route('/homepage_items', methods=['GET'])
 def homepage_items():
     mItems = []
+    default_menu_items = [
+    {
+        'id': 1,
+        'name': 'Blueberry muffin',
+        'price': 5,
+        'image': 'https://www.onceuponachef.com/images/2014/07/Best-Blueberry-Muffins2-1024x660.jpg',
+        'seller': 'John',
+        'category': 'BakeryItem',
+        'description': 'A blueberry muffin',
+        'seller_id': 100
+    }
+    ]
+#     mongoSellerIDs.insert_one("100")
     for item in mongoMenuItems.find():
         del(item['_id'])
         mItems.append(item)
-
+    if (os.environ.get('GITHUB_ACTIONS') and mItems == []):
+        mongoMenuItems.insert_one(default_menu_items[0])
+        for item in mongoMenuItems.find():
+            del(item['_id'])
+            mItems.append(item)
 
     print(mItems)
     response_dict = {"menu_items": mItems} # Change to MONGO?
