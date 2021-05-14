@@ -1,4 +1,5 @@
 import os
+import random
 import sys
 from collections import OrderedDict
 
@@ -239,6 +240,7 @@ default_menu_items = [
 
 # Display all products on the homepage
 @backend_app.route('/homepage_items', methods=['GET'])
+@backend_app.route("/", methods=["GET"])
 def homepage_items():
     mItems = []
     default_menu_items = [
@@ -250,7 +252,8 @@ def homepage_items():
         'seller': 'John',
         'category': 'BakeryItem',
         'description': 'A blueberry muffin',
-        'seller_id': 100
+        'seller_id': 100,
+        'rating': 4,
     }
     ]
 #     mongoSellerIDs.insert_one("100")
@@ -390,6 +393,8 @@ def add_item(seller_id):
 
         if item is None:
             return Response(status=409)
+
+        item["rating"] = random.choice([3,4,5])
 
         # Getting last used Menu Item ID iterating through all the mongOrders
         mID = 0

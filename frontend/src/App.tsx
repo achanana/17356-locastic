@@ -4,11 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css'
 import Cart from './Cart'
 import LoctasticContextProvider from './contexts/LoctasticContext'
-import blueberryMuffin from './images/blueberryMuffin.jpg'
-import cookieGiftBasket from './images/cookieGiftBasket.jpg'
-import croissant from './images/croissant.jpg'
-import redVelvetCake from './images/redVelvetCake.jpg'
-import { itemCategories, menuItem } from './model'
+import { menuItem } from './model'
 import {
   CartPageView,
   Checkout,
@@ -19,48 +15,6 @@ import {
   SellerSignUpForm,
 } from './views'
 import Home from './views/Home'
-
-const defaultDescription =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tristique, mi nec interdum blandit, justo lacus suscipit arcu, at porta magna metus sed lacus. Nullam in nunc vitae turpis ullamcorper tempor at eget leo. Curabitur condimentum ipsum id velit porta consectetur. Aliquam eget velit non ipsum dapibus suscipit id sed nisi. Ut viverra velit eu mi placerat, in consequat leo blandit. Suspendisse tristique quam id odio mattis elementum. Cras elementum tellus at volutpat pulvinar. Fusce vehicula sollicitudin tempus. Suspendisse potenti. Quisque rhoncus iaculis neque eget vestibulum. Quisque tempus pretium ligula non euismod.'
-
-export const menuItems: menuItem[] = [
-  {
-    id: 0,
-    name: 'Red Velvet Cake',
-    image: redVelvetCake,
-    price: 15,
-    category: itemCategories.BakeryItem,
-    seller: 'Jonathan Wang',
-    description: defaultDescription,
-  },
-  {
-    id: 1,
-    name: 'Blueberry Muffin',
-    image: blueberryMuffin,
-    price: 6,
-    category: itemCategories.BakeryItem,
-    seller: 'Marie Smith',
-    description: defaultDescription,
-  },
-  {
-    id: 2,
-    name: 'Croissant',
-    image: croissant,
-    price: 4,
-    category: itemCategories.BakeryItem,
-    seller: 'Panna Julia',
-    description: defaultDescription,
-  },
-  {
-    id: 3,
-    name: 'Cookie Gift Basket',
-    image: cookieGiftBasket,
-    price: 30,
-    category: itemCategories.GiftBasket,
-    seller: 'Roger Ralph',
-    description: defaultDescription,
-  },
-]
 
 export default function App() {
   const [customerCart, setCustomerCart] = useState(new Cart())
@@ -74,7 +28,7 @@ export default function App() {
   }
   return (
     <LoctasticContextProvider
-      value={{ menuItems, customerCart, addItemToCart, removeItemFromCart }}
+      value={{ customerCart, addItemToCart, removeItemFromCart }}
     >
       <div style={{ backgroundColor: '#f2e9da' }}>
         <Router>
@@ -92,7 +46,7 @@ export default function App() {
             <Route path="/seller-signup">
               <SellerSignUpForm />
             </Route>
-            <Route path="add-item">
+            <Route path="/add-item">
               <NewItemForm />
             </Route>
             <Route path="/">
