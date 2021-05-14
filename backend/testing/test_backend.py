@@ -1,6 +1,10 @@
-from flask import Flask
-from flask import request, jsonify, Response
-import requests, unittest, json
+import json
+import os
+import unittest
+
+import requests
+from flask import Flask, Response, jsonify, request
+
 from MySupport import MySupport
 
 seller_id = 0
@@ -9,7 +13,7 @@ item_id = 0
 
 class BackendTests(unittest.TestCase):
     HOSTNAME = "localhost"
-    PORT = 8080
+    PORT = os.environ.get("PORT")
 
     def suite():
         suite = unittest.TestSuite()
