@@ -17,8 +17,8 @@ else:
 
 db = client.db
 
-db.myColl.drop()
-db.create_collection("myColl")  # Force create!
+# db.myColl.drop()
+# db.create_collection("myColl")  # Force create!
 
 
 # Order Schema for testing
