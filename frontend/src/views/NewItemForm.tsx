@@ -2,14 +2,17 @@ import { useAuth0 } from '@auth0/auth0-react'
 import {
   Button,
   Grid,
+  InputLabel,
   makeStyles,
+  Select,
   TextField,
   Typography,
 } from '@material-ui/core'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import * as yup from 'yup'
+import { uploadFileToAWS } from '../api_util/aws_api'
 import { addItem } from '../api_util/backend_apis'
 
 const useStyles = makeStyles((theme) => ({
@@ -23,9 +26,30 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function NewItemForm() {
+  const [image, setImage] = useState<Blob>()
+  const [imagePreviewURL, setImagePreviewURL] = useState<
+    string | ArrayBuffer | null
+  >()
   const classes = useStyles()
   const { user, isAuthenticated, getIdTokenClaims } = useAuth0()
   const history = useHistory()
+
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    let reader = new FileReader()
+    if (e.target.files) {
+      let file = e.target.files[0]
+
+      reader.onloadend = () => {
+        setImage(file)
+        setImagePreviewURL(reader.result)
+        console.log(reader.result)
+        console.log(imagePreviewURL)
+      }
+
+      reader.readAsDataURL(file)
+    }
+  }
+
   const validationSchema = yup.object().shape({
     name: yup
       .string()
@@ -37,6 +61,7 @@ export default function NewItemForm() {
       .number()
       .required('Price is required')
       .positive('Price must be positive'),
+    category: yup.string(),
   })
 
   const formik = useFormik({
@@ -44,16 +69,37 @@ export default function NewItemForm() {
       name: '',
       description: '',
       price: 0,
+      category: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       if (user) {
-        addItem(
-          values,
-          (await getIdTokenClaims())[
-            'https://unique-namespace.com/user_metadata'
-          ].sellerId,
-        )
+        if (image) {
+          const response = await uploadFileToAWS(
+            image,
+            user.name + '_' + values.name,
+            {
+              ext: 'img',
+              mime: image.type,
+            },
+          )
+          addItem(
+            {
+              name: values.name,
+              description: values.description,
+              price: values.price,
+              image: response.Location,
+              category: values.category,
+            },
+            (await getIdTokenClaims())['http://userid/user_metadata'].sellerId,
+          )
+        } else {
+          alert('Image is null')
+          addItem(
+            values,
+            (await getIdTokenClaims())['http://userid/user_metadata'].sellerId,
+          )
+        }
         history.push('/')
       }
     },
@@ -103,6 +149,37 @@ export default function NewItemForm() {
                 onChange={formik.handleChange}
                 error={formik.touched.price && Boolean(formik.errors.price)}
                 helperText={formik.touched.price && formik.errors.price}
+              />
+            </Grid>
+            <Grid item>
+              <InputLabel htmlFor="">Item Category</InputLabel>
+              <Select
+                native
+                id="category"
+                name="category"
+                label="Category"
+                value={formik.values.category}
+                onChange={formik.handleChange}
+                inputProps={{
+                  name: 'category',
+                  id: 'category',
+                }}
+                error={
+                  formik.touched.category && Boolean(formik.errors.category)
+                }
+              >
+                <option aria-label="None" value="" />
+                <option value="BakeryItem">Bakery item</option>
+                <option value="GiftBasket">Gift basket</option>
+              </Select>
+            </Grid>
+            <Grid item>
+              <Typography variant="h6">Add item image</Typography>
+              <br />
+              <input
+                type="file"
+                onChange={(e) => handleImageChange(e)}
+                accept=".jpg, .jpeg, .png"
               />
             </Grid>
             <Grid item>

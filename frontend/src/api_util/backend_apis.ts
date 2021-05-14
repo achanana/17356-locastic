@@ -39,11 +39,19 @@ export async function addItem(
     name: string
     description: string
     price: number
+    image?: string
+    category: string
   },
   sellerId: number,
 ) {
   try {
-    await backendInstance.post('/add_item/' + sellerId)
+    await backendInstance.post('/add_item/' + sellerId, {
+      name: values.name,
+      description: values.description,
+      price: values.price,
+      image: values.image,
+      category: values.category,
+    })
   } catch (error) {
     alert(error)
   }
