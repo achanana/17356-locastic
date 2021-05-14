@@ -7,13 +7,14 @@
 
 ## The APIs part of the Backend are:
 
-1. Homepage_items -> Get
-2. Add_Seller -> Post
-3. Seller_info -> Get
-4. Seller Orders -> Get
-5. Add_Item -> Post
-6. Add_Order -> Post
-7. Remove Item -> Delete
+1. / or /homepage_items -> GET
+2. /add_seller -> POST
+3. /seller_info/<seller_id> -> GET
+4. /item_info/<item_id> -> GET
+5. /seller_orders/<seller_id> -> GET
+6. /add_item/<seller_id> -> POST
+7. /add_order -> POST
+8. /remove_item/<seller_id> -> DELETE
 
 
 
@@ -42,6 +43,10 @@
 ### Seller Info after adding items:
 
 ![image](https://user-images.githubusercontent.com/55013810/117114107-6b5ec680-ad59-11eb-8f55-97ff6018520b.png)
+
+### Seller Info after adding items:
+
+![image](https://user-images.githubusercontent.com/55013810/118321057-10507080-b4cb-11eb-9e58-41b62b8e3741.png)
 
 ### Homepage after adding item:
 
