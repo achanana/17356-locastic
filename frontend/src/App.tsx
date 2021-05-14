@@ -12,6 +12,7 @@ import {
   ItemPage,
   NavBar,
   NewItemForm,
+  PaymentProcessing,
   SellerSignUpForm,
 } from './views'
 import Home from './views/Home'
@@ -30,7 +31,7 @@ export default function App() {
     <LoctasticContextProvider
       value={{ customerCart, addItemToCart, removeItemFromCart }}
     >
-      <div style={{ backgroundColor: '#f2e9da' }}>
+      <div style={{ backgroundColor: '#f2e9da', height: '100%' }}>
         <Router>
           <NavBar />
           <Switch>
@@ -48,6 +49,9 @@ export default function App() {
             </Route>
             <Route path="/add-item">
               <NewItemForm />
+            </Route>
+            <Route path="/processing/:id">
+              <PaymentProcessing />
             </Route>
             <Route path="/">
               <Home />

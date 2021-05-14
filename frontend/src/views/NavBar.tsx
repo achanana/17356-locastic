@@ -36,13 +36,31 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function NavBar() {
-  const { isAuthenticated } = useAuth0()
   const classes = useStyles()
   const { customerCart } = useContext(LoctasticContext)
+  const { logout, loginWithRedirect, isAuthenticated } = useAuth0()
   return (
     <Box mb={4}>
       <AppBar position="static" color="transparent" className={classes.navBar}>
         <Toolbar>
+          {!isAuthenticated && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => loginWithRedirect()}
+            >
+              Seller Log In
+            </Button>
+          )}
+          {isAuthenticated && (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => logout({ returnTo: window.location.origin })}
+            >
+              Logout
+            </Button>
+          )}
           <Typography className={classes.title}>
             <Link component={RouterLink} color="inherit" to="/">
               <img src={Logo} alt="Locastic" className={classes.logo} />

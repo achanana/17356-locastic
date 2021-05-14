@@ -7,6 +7,7 @@ import ItemPage from './ItemPage'
 import MenuItem from './MenuItem'
 import NavBar from './NavBar'
 import NewItemForm from './NewItemForm'
+import PaymentProcessing from './PaymentProcessing'
 import SellerSignUpForm from './SellerSignupForm'
 
 export {
@@ -20,4 +21,5 @@ export {
   Footer,
   SellerSignUpForm,
   NewItemForm,
+  PaymentProcessing,
 }

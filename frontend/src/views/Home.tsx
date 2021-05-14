@@ -35,6 +35,18 @@ export default function Home() {
     fetchMenuItems()
   }, [fetchMenuItems])
 
+  const bakeryItems = menuItems
+    ? menuItems.filter(
+        (menuItem) => menuItem.category === itemCategories.BakeryItem,
+      )
+    : null
+
+  const giftBaskets = menuItems
+    ? menuItems.filter(
+        (menuItem) => menuItem.category === itemCategories.GiftBasket,
+      )
+    : null
+
   return (
     <div className={classes.root}>
       {isAuthenticated && user && (
@@ -42,30 +54,32 @@ export default function Home() {
           <h2>Welcome, {user.name}!</h2>
         </div>
       )}
-      <h3>Bakery items</h3>
-      <Grid container spacing={1}>
-        {menuItems
-          ? menuItems
-              .filter(
-                (menuItem) => menuItem.category === itemCategories.BakeryItem,
-              )
-              .map((menuItem: menuItem) => (
-                <MenuItem key={menuItem.id} menuItem={menuItem} />
-              ))
-          : null}
-      </Grid>
-      <h3>Gift Baskets</h3>
-      <Grid container spacing={1}>
-        {menuItems
-          ? menuItems
-              .filter(
-                (menuItem) => menuItem.category === itemCategories.GiftBasket,
-              )
-              .map((menuItem: menuItem) => (
-                <MenuItem key={menuItem.id} menuItem={menuItem} />
-              ))
-          : null}
-      </Grid>
+      {bakeryItems && bakeryItems?.length != 0 && (
+        <div>
+          <h3>Bakery items</h3>
+          <Grid container spacing={1}>
+            {bakeryItems.map((menuItem: menuItem) => (
+              <MenuItem key={menuItem.id} menuItem={menuItem} />
+            ))}
+          </Grid>
+        </div>
+      )}
+      {giftBaskets && giftBaskets?.length != 0 && (
+        <div>
+          <h3>Gift Baskets</h3>
+          <Grid container spacing={1}>
+            {giftBaskets.map((menuItem: menuItem) => (
+              <MenuItem key={menuItem.id} menuItem={menuItem} />
+            ))}
+          </Grid>
+        </div>
+      )}
+      {!(giftBaskets && giftBaskets?.length != 0) &&
+        !(bakeryItems && bakeryItems?.length != 0) && (
+          <div>
+            <h3>No menu items currently available</h3>
+          </div>
+        )}
     </div>
   )
 }

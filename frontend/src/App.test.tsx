@@ -12,6 +12,6 @@ test('renders landing page', () => {
     </StoreProvider>
   )
   render(app)
-  const linkElement = screen.getByText(/Bakery items/i)
+  const linkElement = screen.getByText(/No menu items currently available/i)
   expect(linkElement).toBeInTheDocument()
 })
