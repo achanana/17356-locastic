@@ -38,6 +38,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
         working-directory: ./backend
+      - name: Run backend tests
+        working-directory: ./backend/testing
+        run: python test_backend.py
       - run: npm ci
       - run: npm run build --if-present
       - name: Start MongoDB
