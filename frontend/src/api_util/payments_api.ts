@@ -18,7 +18,7 @@ export async function processPayment(total: number) {
 
 export async function checkPaymentStatus(transId: number) {
   try {
-    const response = await instance.get('trasactions/' + transId)
+    const response = await instance.get('transactions/' + transId)
     return response.data.status
   } catch (error) {
     return null

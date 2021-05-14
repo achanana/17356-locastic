@@ -9,6 +9,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { useFormik } from 'formik'
 import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import * as yup from 'yup'
 import { processPayment } from '../api_util/payments_api'
 import { LoctasticContext } from '../contexts/LoctasticContext'
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Checkout() {
   const classes = useStyles()
   const { customerCart } = useContext(LoctasticContext)
+  const history = useHistory()
 
   // const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
   //     setFormState({ ...formState, [event.target.name]: event.target.value })
@@ -93,6 +95,7 @@ export default function Checkout() {
         'http://credit.17-356.isri.cmu.edu/?transaction_id=' + transId,
         '_blank',
       )
+      history.push('/processing/' + transId)
     } else {
       alert('Payment cannot be processed at this time.')
     }
@@ -110,8 +113,7 @@ export default function Checkout() {
       zip: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values))
+    onSubmit: () => {
       submitOrder()
     },
   })
