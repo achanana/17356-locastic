@@ -9,8 +9,10 @@ from pymongo import MongoClient
 backend_app = Flask(__name__)
 CORS(backend_app)
 
-
-client = MongoClient(port=27017)
+if os.environ.get('RUNNING_ON_HEROKU'):
+    client = MongoClient("mongodb+srv://admin:" + os.environ.get('MONGO_ATLAS_PWD') + "@cluster0.pkhxr.mongodb.net/loctastic?retryWrites=true&w=majority")
+else:
+    client = MongoClient(port=27017)
 
 db = client.db
 
