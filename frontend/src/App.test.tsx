@@ -1,7 +1,7 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
-import { StoreProvider } from 'easy-peasy';
+import { render, screen } from '@testing-library/react'
+import { StoreProvider } from 'easy-peasy'
+import React from 'react'
+import App from './App'
 import store from './store/store'
 
 test('renders landing page', () => {
@@ -10,8 +10,8 @@ test('renders landing page', () => {
     <StoreProvider store={testStore}>
       <App />
     </StoreProvider>
-  );
+  )
   render(app)
-  const linkElement = screen.getByText(/Welcome/i);
-  expect(linkElement).toBeInTheDocument();
-});
+  const linkElement = screen.getByText(/Bakery items/i)
+  expect(linkElement).toBeInTheDocument()
+})
