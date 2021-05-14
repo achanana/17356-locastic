@@ -5,13 +5,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     defaults:
@@ -24,27 +23,31 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Setup Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-      working-directory: ./backend
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: gunicorn 'app:create_app()' &
-      env:
-        PORT: 8000
-      working-directory: ./backend
-    - run: npm start &
-      env:
-        REACT_APP_BACKEND_URL: http://localhost:8000
-    - run: npm test
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        working-directory: ./backend
+      - run: npm ci
+      - run: npm run build --if-present
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.4.0
+        with:
+          mongodb-version: 4.4
+      - run: gunicorn 'app:create_app()' &
+        env:
+          PORT: 8000
+        working-directory: ./backend
+      - run: npm start &
+        env:
+          REACT_APP_BACKEND_URL: http://localhost:8000
+      - run: npm test
