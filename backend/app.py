@@ -5,6 +5,7 @@ from collections import OrderedDict
 from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 from pymongo import MongoClient
+import random
 
 backend_app = Flask(__name__)
 CORS(backend_app)
@@ -387,6 +388,7 @@ def seller_orders(seller_id):
 def add_item(seller_id):
     if request.method == 'POST':
         item = request.get_json()
+        item["rating"] = random.choice([3,4,5])
 
         if item is None:
             return Response(status=409)
