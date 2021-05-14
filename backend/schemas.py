@@ -1,18 +1,10 @@
-import os
-import sys
-from collections import OrderedDict
-
-from flask import Flask, Response, jsonify, request
-from flask_cors import CORS
 from pymongo import MongoClient
+from flask import Flask
+from flask import request, jsonify, Response
+from collections import OrderedDict
+import sys
 
-backend_app = Flask(__name__)
-CORS(backend_app)
-
-if os.environ.get('RUNNING_ON_HEROKU'):
-    client = MongoClient("mongodb+srv://admin:" + os.environ.get('MONGO_ATLAS_PWD') + "@cluster0.pkhxr.mongodb.net/loctastic?retryWrites=true&w=majority")
-else:
-    client = MongoClient(port=27017)
+client = MongoClient(port=27017)
 
 db = client.db
 
@@ -29,7 +21,7 @@ vexprOrder = {
                     "order_id": {
                         "bsonType": "int",
                         "description": "must be an int and is required"
-                    },
+                    },    
                     "items": {
                         "bsonType": "array",
                         "items": {
@@ -50,32 +42,32 @@ vexprOrder = {
             }
         }
 
-# cmd = OrderedDict([('collMod', 'myColl'),
-#         ('validator', vexprOrder),
-#         ('validationLevel', 'moderate')])
+cmd = OrderedDict([('collMod', 'myColl'),
+        ('validator', vexprOrder),
+        ('validationLevel', 'moderate')])
 
-# db.command(cmd)
+db.command(cmd)
 
 
 # Seller Schema for testing
 vexprSeller = {
-            "$jsonSchema": {
+            "$jsonSchema": { 
                     "bsonType": "object",
                     "required": ["id","name","order_ids", "items"],
                     "properties": {
-                        "id":
+                        "id": 
                         {
                             "bsonType": "int",
                             "description": "must be an int and is required"
                         },
-                        "name":
+                        "name": 
                         {
                             "bsonType": "string",
                             "description": "must be a string and is required"
-                        },
+                        },    
                         "order_ids": {
                             "bsonType": "array",
-                            "items":
+                            "items": 
                             {
                                 "bsonType": "int"
                             },
@@ -83,7 +75,7 @@ vexprSeller = {
                         },
                         "items": {
                             "bsonType": "array",
-                            "items":
+                            "items": 
                             {
                                 "bsonType": "string"
                             }
@@ -92,11 +84,11 @@ vexprSeller = {
                 }
         }
 
-# cmd = OrderedDict([('collMod', 'myColl'),
-#         ('validator', vexprSeller),
-#         ('validationLevel', 'moderate')])
+cmd = OrderedDict([('collMod', 'myColl'),
+        ('validator', vexprSeller),
+        ('validationLevel', 'moderate')])
 
-# db.command(cmd)
+db.command(cmd)
 
 # Menu Item Schema for testing
 vexprMenu = {
@@ -111,7 +103,7 @@ vexprMenu = {
                     "name": {
                         "bsonType": "string",
                         "description": "must be a string and is required"
-                    },
+                    },  
                     "price": {
                         "bsonType": "double",
                         "description": "must be a double and is required"
@@ -128,58 +120,29 @@ vexprMenu = {
             }
 }
 
-# cmd = OrderedDict([('collMod', 'myColl'),
-#         ('validator', vexprMenu),
-#         ('validationLevel', 'moderate')])
+cmd = OrderedDict([('collMod', 'myColl'),
+        ('validator', vexprMenu),
+        ('validationLevel', 'moderate')])
 
-# db.command(cmd)
+db.command(cmd)
 
-
+backend_app = Flask(__name__)
 
 # next_order_id = 1
 # next_seller_id = 1
 # next_item_id = 1
 
-
 # orders = []
-# db.create_collection("orders")  # Force create!
 mongOrders = db["orders"]
 
-# cmd = OrderedDict([('collMod', 'orders'),
-#         ('validator', vexprOrder),
-#         ('validationLevel', 'moderate')])
-
-# db.command(cmd)
-
-
-
 # order_items = []
-# db.create_collection("order_items")  # Force create!
 mongOrderItems = db["order_items"]
 
-
 # sellers = []
-# db.create_collection("sellers")  # Force create!
 mongSellers = db["sellers"]
 
-# cmd = OrderedDict([('collMod', 'sellers'),
-#         ('validator', vexprSeller),
-#         ('validationLevel', 'moderate')])
-
-# db.command(cmd)
-
-
 # menu_items = []
-# db.create_collection("menu_items")  # Force create!
 mongoMenuItems = db["menu_items"]
-
-# cmd = OrderedDict([('collMod', 'menu_items'),
-#         ('validator', vexprMenu),
-#         ('validationLevel', 'moderate')])
-
-# db.command(cmd)
-
-
 
 mongoItemIDs = db["item_ids"]
 mongoSellerIDs = db["seller_ids"]
@@ -219,50 +182,16 @@ mongoOrderIDs = db["order_ids"]
 # def hello_world():
 #     return 'Hello, World!'
 
-orders = []
-order_items = []
-sellers = []
-
-default_menu_items = [
-    {
-        'id': 1,
-        'name': 'Blueberry muffin',
-        'price': 5,
-        'image': 'https://www.onceuponachef.com/images/2014/07/Best-Blueberry-Muffins2-1024x660.jpg',
-        'seller': 'John',
-        'category': 'BakeryItem',
-        'description': 'A blueberry muffin',
-        'seller_id': 100
-    }
-]
-
 
 # Display all products on the homepage
 @backend_app.route('/homepage_items', methods=['GET'])
 def homepage_items():
     mItems = []
-    default_menu_items = [
-    {
-        'id': 1,
-        'name': 'Blueberry muffin',
-        'price': 5,
-        'image': 'https://www.onceuponachef.com/images/2014/07/Best-Blueberry-Muffins2-1024x660.jpg',
-        'seller': 'John',
-        'category': 'BakeryItem',
-        'description': 'A blueberry muffin',
-        'seller_id': 100
-    }
-    ]
-#     mongoSellerIDs.insert_one("100")
-    for item in mongoMenuItems.find():
+    for item in mongoMenuItems.find(): 
         del(item['_id'])
         mItems.append(item)
-    if (os.environ.get('GITHUB_ACTIONS') and mItems == []):
-        mongoMenuItems.insert_one(default_menu_items[0])
-        for item in mongoMenuItems.find():
-            del(item['_id'])
-            mItems.append(item)
 
+    
     print(mItems)
     response_dict = {"menu_items": mItems} # Change to MONGO?
     response = jsonify(response_dict)
@@ -279,13 +208,14 @@ def seller_info(id):
             response = jsonify(seller)
             break
     if response == None:
-        # print("here")
+        print("here")
         response = jsonify({})
         response.status_code = 409
     else:
         response.status_code = 200
     return response
 
+# Add/Place new order  
 @backend_app.route('/add_order', methods=['POST'])
 def add_order():
     order = request.get_json()
@@ -294,30 +224,26 @@ def add_order():
         return Response(status=409)
     if "items" not in order:
       return Response(status=409)
-
-
+    
     # Getting last used Order ID iterating through all the mongOrders
     oID = 0
     for oItems in mongoOrderIDs.find():
         oID = oItems["id"]
-
+    
     oID += 1
 
     order["id"] = oID
 
-    # Build response to return assigned order id to customer
+    # Build response to return assigned order id to customer 
     response = jsonify({"order_id": order["id"]})
-
     # response = jsonify(order)
 
     response.status_code = 200
-
     mongOrders.insert_one(order)
     mongoOrderIDs.insert_one(order)
     # orders.append(order) # Change this to MONGO!
-
-
-    # print("added order")
+    
+    print("added order")
     # Need to look for which items from the order
     # are sold by which sellers and add the order_id
     # to the respective seller_ids
@@ -328,7 +254,6 @@ def add_order():
                 new_seller["order_ids"].append(order["id"]) # CHANGED TO MONGO
                 mongSellers.find_one_and_replace({'_id': seller["_id"]}, new_seller)
                 break
-
     # print(mongOrders.find())
 
     return response
@@ -348,19 +273,19 @@ def add_seller():
     sID = 0
     for sItems in mongoSellerIDs.find():
         sID = sItems["id"]
-
+    
     sID += 1
 
     seller["id"] = sID
+
 
     # Build response to return assigned seller id to seller
     response = jsonify({"seller_id": seller["id"] })
     # next_seller_id += 1 # Change this to MONGO!
     response.status_code = 200
-
     mongSellers.insert_one(seller) # Change this to MONGO!
     mongoSellerIDs.insert_one(seller)
-
+    
     return response
 
 
@@ -380,8 +305,8 @@ def seller_orders(seller_id):
     else:
         response.status_code = 200
     return response
-
-
+    
+    
 # Add a new item to the product list for a seller
 @backend_app.route('/add_item/<seller_id>', methods=['POST'])
 def add_item(seller_id):
@@ -390,12 +315,12 @@ def add_item(seller_id):
 
         if item is None:
             return Response(status=409)
-
+        
         # Getting last used Menu Item ID iterating through all the mongOrders
         mID = 0
         for mItems in mongoItemIDs.find():
             mID = mItems["id"]
-
+        
         mID += 1
 
         item["id"] = mID
@@ -404,7 +329,7 @@ def add_item(seller_id):
         mongoItemIDs.insert_one(item)
 
         for seller in mongSellers.find():
-
+          
         #   print("Seller ID in mongo: " + str(seller["id"]))
         #   print("Seller ID in schemas.py: " + str(seller_id))
           if seller["id"] == int(seller_id):
@@ -412,7 +337,7 @@ def add_item(seller_id):
                 new_seller = seller
                 new_seller["items"].append(item["id"]) # This could be a bug
                 print(new_seller)
-
+                
                 # print(seller["items"])
                 mongSellers.find_one_and_replace({'_id': seller["_id"]}, new_seller)
                 break
@@ -420,8 +345,8 @@ def add_item(seller_id):
         # Build response to return item_id to seller
         # and also add to seller items
         response = jsonify({"item_id": item["id"] })
-        response.status_code = 200
-
+        response.status_code = 200        
+       
         return response
 
 
@@ -431,14 +356,12 @@ def add_item(seller_id):
 @backend_app.route('/remove_item/<seller_id>', methods=['DELETE'])
 def remove_item(seller_id):
     if request.method == 'DELETE':
-
+        
         item = request.get_json()
         if item is None:
-            print("item is None")
             return Response(status=409)
 
         flag = 0
-
         for seller in mongSellers.find():
             if seller["id"] == int(seller_id):
                 if item["id"] in seller["items"]:
@@ -451,11 +374,10 @@ def remove_item(seller_id):
 
         for it in mongoMenuItems.find():
           if it["id"] == item["id"]:
-                mongoMenuItems.delete_one(it)
+                mongoMenuItems.delete_one(it) 
                 break
 
         if flag == 0:
-            print("Flag zero")
             return Response(status=409)
         else:
             return Response(status=200)
@@ -481,30 +403,20 @@ def item_info(id):
 
 
 
-# if __name__ == '__main__':
-#     # manager_server.run(host="localhost", port=int(sys.argv[2]))
-#     if (os.environ.get('GITHUB_ACTIONS')):
-#         print("It was true")
-#         menu_items = default_menu_items
-#     else:
-#         print("It wasn't true!")
-#     port = int(os.environ.get('PORT'))
-#     backend_app.run(host="0.0.0.0", port=port)
-
-def create_app():
-    port = int(os.environ.get('PORT'))
-    # backend_app.run(host="127.0.0.1", port=port)
-
-    return backend_app
+if __name__ == '__main__':
+    # manager_server.run(host="localhost", port=int(sys.argv[2]))
+    backend_app.run(host="localhost", port=8080)
 
 
 '''
 Order
     - add an order, includes all the items included
+
 Seller
     - verify login credentials
     - list of orders placed for your items
     - mark an order item as delivered -- basically update the status of orders
+
     - add a new item
     - remove an existing item
 '''
