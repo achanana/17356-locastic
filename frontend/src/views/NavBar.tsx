@@ -52,6 +52,17 @@ export default function NavBar() {
               Seller Log In
             </Button>
           )}
+          &nbsp;
+          {!isAuthenticated && (
+            <Button
+              variant="contained"
+              color="primary"
+              component={RouterLink}
+              to="/seller-signup"
+            >
+              Seller Sign Up
+            </Button>
+          )}
           {isAuthenticated && (
             <Button
               variant="contained"
