@@ -48,6 +48,11 @@ jobs:
         env:
           PORT: 8000
         working-directory: ./backend
+      - name: Run backend tests
+        working-directory: ./backend/testing
+        run: python test_backend.py
+        env:
+          PORT: 8000
       - run: npm start &
         env:
           REACT_APP_BACKEND_URL: http://localhost:8000
