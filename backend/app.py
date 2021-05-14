@@ -9,6 +9,7 @@ from pymongo import MongoClient
 backend_app = Flask(__name__)
 CORS(backend_app)
 
+
 client = MongoClient(port=27017)
 
 db = client.db
@@ -142,11 +143,11 @@ vexprMenu = {
 # db.create_collection("orders")  # Force create!
 mongOrders = db["orders"]
 
-cmd = OrderedDict([('collMod', 'orders'),
-        ('validator', vexprOrder),
-        ('validationLevel', 'moderate')])
+# cmd = OrderedDict([('collMod', 'orders'),
+#         ('validator', vexprOrder),
+#         ('validationLevel', 'moderate')])
 
-db.command(cmd)
+# db.command(cmd)
 
 
 
@@ -159,22 +160,22 @@ mongOrderItems = db["order_items"]
 # db.create_collection("sellers")  # Force create!
 mongSellers = db["sellers"]
 
-cmd = OrderedDict([('collMod', 'sellers'),
-        ('validator', vexprSeller),
-        ('validationLevel', 'moderate')])
+# cmd = OrderedDict([('collMod', 'sellers'),
+#         ('validator', vexprSeller),
+#         ('validationLevel', 'moderate')])
 
-db.command(cmd)
+# db.command(cmd)
 
 
 # menu_items = []
 # db.create_collection("menu_items")  # Force create!
 mongoMenuItems = db["menu_items"]
 
-cmd = OrderedDict([('collMod', 'menu_items'),
-        ('validator', vexprMenu),
-        ('validationLevel', 'moderate')])
+# cmd = OrderedDict([('collMod', 'menu_items'),
+#         ('validator', vexprMenu),
+#         ('validationLevel', 'moderate')])
 
-db.command(cmd)
+# db.command(cmd)
 
 
 
@@ -232,14 +233,6 @@ default_menu_items = [
         'seller_id': 100
     }
 ]
-
-if (os.environ.get('GITHUB_ACTIONS')):
-    menu_items = default_menu_items
-    mongoMenuItems.insert_one(default_menu_items[0])
-#     mongoSellerIDs.insert_one("100")
-else:
-    menu_items = []
-
 
 
 # Display all products on the homepage
@@ -482,6 +475,7 @@ def item_info(id):
 def create_app():
     port = int(os.environ.get('PORT'))
     # backend_app.run(host="127.0.0.1", port=port)
+
     return backend_app
 
 
