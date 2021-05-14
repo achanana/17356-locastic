@@ -240,6 +240,7 @@ default_menu_items = [
 
 # Display all products on the homepage
 @backend_app.route('/homepage_items', methods=['GET'])
+@backend_app.route("/", methods=["GET"])
 def homepage_items():
     mItems = []
     default_menu_items = [
