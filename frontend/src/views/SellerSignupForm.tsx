@@ -51,12 +51,15 @@ export default function SellerSignup() {
     description: string
   }) {
     try {
-      addSeller(values)
+      let sellerId = await addSeller(values)
       await auth0Instance.post('/dbconnections/signup', {
         client_id: 'MsfplCFtHA4fi8lJbx3tY1XLkIdoJqkC',
         email: values.email,
         password: values.password,
         connection: 'Username-Password-Authentication',
+        user_metadata: {
+          sellerId: sellerId,
+        },
       })
     } catch (error) {
       alert(error)

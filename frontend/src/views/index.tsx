@@ -6,6 +6,7 @@ import Home from './Home'
 import ItemPage from './ItemPage'
 import MenuItem from './MenuItem'
 import NavBar from './NavBar'
+import NewItemForm from './NewItemForm'
 import SellerSignUpForm from './SellerSignupForm'
 
 export {
@@ -18,4 +19,5 @@ export {
   NavBar,
   Footer,
   SellerSignUpForm,
+  NewItemForm,
 }

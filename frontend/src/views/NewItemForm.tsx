@@ -1,9 +1,14 @@
-import { Grid, Typography } from '@material-ui/core'
+import { useAuth0 } from '@auth0/auth0-react'
+import { Button, Grid, TextField, Typography } from '@material-ui/core'
 import { useFormik } from 'formik'
 import React from 'react'
+import { useHistory } from 'react-router'
 import * as yup from 'yup'
+import { addItem } from '../api_util/backend_apis'
 
 export default function NewItemForm() {
+  const { user, isAuthenticated } = useAuth0()
+  const history = useHistory()
   const validationSchema = yup.object().shape({
     name: yup
       .string()
@@ -27,14 +32,54 @@ export default function NewItemForm() {
       price: 0,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      if (user) {
+        addItem(values, user.user_metadata.sellerId)
+        history.push('/')
+      }
+    },
   })
-  return (
-    <Grid>
-      <Grid item>
-        <Typography variant="h5">Add a new item</Typography>
+  let form: JSX.Element
+  if (isAuthenticated) {
+    form = (
+      <Grid>
+        <Grid item>
+          <Typography variant="h5">Add a new item</Typography>
+        </Grid>
+        <Grid item>
+          <TextField
+            id="name"
+            name="name"
+            label="Item Name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            error={formik.touched.name && Boolean(formik.errors.name)}
+            helperText={formik.touched.name && formik.errors.name}
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            id="description"
+            name="description"
+            label="Description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.description && Boolean(formik.errors.description)
+            }
+            helperText={formik.touched.description && formik.errors.description}
+          />
+        </Grid>
+        <Grid item>
+          <Button variant="contained" color="primary" type="submit">
+            Create
+          </Button>
+        </Grid>
       </Grid>
-      <Grid item></Grid>
-    </Grid>
-  )
+    )
+  } else {
+    form = <Typography variant="h5">Seller not logged in</Typography>
+  }
+
+  return form
 }

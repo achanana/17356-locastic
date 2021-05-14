@@ -34,3 +34,17 @@ export async function addSeller(values: {
     alert(error)
   }
 }
+export async function addItem(
+  values: {
+    name: string
+    description: string
+    price: number
+  },
+  sellerId: number,
+) {
+  try {
+    await backendInstance.post('/add_item/' + sellerId)
+  } catch (error) {
+    alert(error)
+  }
+}
