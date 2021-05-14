@@ -57,8 +57,9 @@ export default function SellerSignup() {
         email: values.email,
         password: values.password,
         connection: 'Username-Password-Authentication',
+        name: values.name,
         user_metadata: {
-          sellerId: sellerId,
+          sellerId: sellerId.toString(),
         },
       })
     } catch (error) {
